@@ -270,7 +270,7 @@
                         🔒 DES
                     </button>
 
-                    <button class="crypto-tab">
+                    <button class="crypto-tab" id="rsa-tab">
                         🔑 RSA
                     </button>
 
@@ -543,6 +543,238 @@
                                 placeholder="Your DES result will appear here..."
                             ></textarea>
 
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- RSA workspace -->
+
+                <div
+                    class="crypto-workspace"
+                    id="rsa-workspace"
+                    style="display: none;"
+                >
+
+                    <div class="crypto-header">
+
+                        <div>
+                            <p class="eyebrow">RSA</p>
+
+                            <h3>Rivest–Shamir–Adleman</h3>
+
+                            <p class="rsa-info">
+                                Public-key cryptography using RSA-OAEP.
+                            </p>
+                        </div>
+
+                        <span class="algorithm-badge">
+                            RSA-OAEP
+                        </span>
+
+                    </div>
+
+
+                    <!-- RSA Information -->
+
+                    <div class="crypto-info">
+
+                        <div>
+                            <strong>Key size</strong>
+                            <span>2048 bit</span>
+                        </div>
+
+                        <div>
+                            <strong>Encryption</strong>
+                            <span>OAEP</span>
+                        </div>
+
+                        <div>
+                            <strong>Key type</strong>
+                            <span>Public / Private</span>
+                        </div>
+
+                    </div>
+
+
+                    <!-- Key Generation -->
+
+                    <div class="rsa-key-section">
+
+                        <div class="rsa-section-header">
+
+                            <div>
+                                <strong>RSA Key Pair</strong>
+
+                                <p>
+                                    Generate a new 2048-bit public/private key pair.
+                                </p>
+                            </div>
+
+                            <button
+                                id="rsa-generate"
+                                class="primary-action"
+                            >
+                                🔑 Generate Keys
+                            </button>
+
+                        </div>
+
+
+                        <div class="rsa-key-grid">
+
+                            <!-- Public Key -->
+
+                            <div class="input-group">
+
+                                <label for="rsa-public-key">
+                                    Public Key
+                                </label>
+
+                                <textarea
+                                    id="rsa-public-key"
+                                    rows="8"
+                                    readonly
+                                    placeholder="Your public key will appear here..."
+                                ></textarea>
+
+                                <button
+                                    id="rsa-copy-public"
+                                    class="clear-action"
+                                >
+                                    📋 Copy Public Key
+                                </button>
+
+                            </div>
+
+
+                            <!-- Private Key -->
+
+                            <div class="input-group">
+
+                                <label for="rsa-private-key">
+                                    Private Key
+                                </label>
+
+                                <textarea
+                                    id="rsa-private-key"
+                                    rows="8"
+                                    readonly
+                                    placeholder="Your private key will appear here..."
+                                ></textarea>
+
+                                <button
+                                    id="rsa-copy-private"
+                                    class="clear-action"
+                                >
+                                    📋 Copy Private Key
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- RSA Operations -->
+
+                    <div class="crypto-form">
+
+                        <div class="input-group">
+
+                            <label for="rsa-text">
+                                Input Text
+                            </label>
+
+                            <textarea
+                                id="rsa-text"
+                                rows="7"
+                                placeholder="Enter text to encrypt or ciphertext to decrypt..."
+                            ></textarea>
+
+                        </div>
+
+
+                        <div class="crypto-actions">
+
+                            <button
+                                id="rsa-encrypt"
+                                class="primary-action"
+                            >
+                                🔐 Encrypt
+                            </button>
+
+                            <button
+                                id="rsa-decrypt"
+                                class="secondary-action"
+                            >
+                                🔓 Decrypt
+                            </button>
+
+                            <button
+                                id="rsa-clear"
+                                class="clear-action"
+                            >
+                                Clear
+                            </button>
+
+                        </div>
+
+
+                        <!-- RSA Message -->
+
+                        <div
+                            id="rsa-message"
+                            class="crypto-message"
+                        ></div>
+
+
+                        <!-- RSA Result -->
+
+                        <div class="result-container">
+
+                            <div class="result-header">
+
+                                <span>RESULT</span>
+
+                                <button id="rsa-copy-result">
+                                    Copy
+                                </button>
+
+                            </div>
+
+                            <textarea
+                                id="rsa-result"
+                                rows="7"
+                                readonly
+                                placeholder="Your RSA result will appear here..."
+                            ></textarea>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Public / Private Explanation -->
+
+                    <div class="rsa-explanation">
+
+                        <div>
+                            <strong>🔓 Public Key</strong>
+
+                            <p>
+                                Used to encrypt data. It can be shared with others.
+                            </p>
+                        </div>
+
+                        <div>
+                            <strong>🔐 Private Key</strong>
+
+                            <p>
+                                Used to decrypt data. Keep it secret.
+                            </p>
                         </div>
 
                     </div>

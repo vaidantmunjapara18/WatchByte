@@ -1116,3 +1116,128 @@ button {
 
     font-weight: bold;
 }
+
+/* ==========================================
+   RSA CRYPTOGRAPHY
+   ========================================== */
+
+.rsa-key-section {
+    margin-top: 24px;
+    padding: 20px;
+    border: 1px solid #1d344d;
+    border-radius: 12px;
+    background-color: #0b1828;
+}
+
+.rsa-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.rsa-section-header strong {
+    display: block;
+    font-size: 16px;
+}
+
+.rsa-section-header p {
+    margin-top: 6px;
+    margin-bottom: 0;
+    color: #7890ad;
+    font-size: 13px;
+}
+
+.rsa-key-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.rsa-key-grid textarea {
+    width: 100%;
+    min-height: 180px;
+    resize: vertical;
+    box-sizing: border-box;
+
+    background-color: #071321;
+    color: #dce8f5;
+
+    border: 1px solid #203850;
+    border-radius: 8px;
+
+    padding: 14px;
+
+    font-family: Consolas, monospace;
+    font-size: 12px;
+
+    outline: none;
+}
+
+.rsa-key-grid textarea:focus {
+    border-color: #00d4ff;
+}
+
+.rsa-key-grid .clear-action {
+    margin-top: 10px;
+}
+
+.rsa-info {
+    color: #7890ad;
+    margin-top: 6px;
+}
+
+.rsa-explanation {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+
+    margin-top: 24px;
+    padding-top: 20px;
+
+    border-top: 1px solid #1d344d;
+}
+
+.rsa-explanation > div {
+    padding: 18px;
+
+    background-color: #0f2135;
+
+    border: 1px solid #1d344d;
+    border-radius: 10px;
+}
+
+.rsa-explanation strong {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.rsa-explanation p {
+    margin: 0;
+
+    color: #7890ad;
+
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* RSA responsive layout */
+
+@media (max-width: 900px) {
+
+    .rsa-key-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .rsa-explanation {
+        grid-template-columns: 1fr;
+    }
+
+    .rsa-section-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+}

@@ -487,20 +487,364 @@ cryptoTabs.forEach((tab) => {
         tab.classList.add("active");
 
 
-        if (tab.id === "des-tab") {
+       if (tab.id === "des-tab") {
 
             aesWorkspace.style.display = "none";
-
             desWorkspace.style.display = "block";
+            rsaWorkspace.style.display = "none";
+
+        } else if (tab.id === "rsa-tab") {
+
+            aesWorkspace.style.display = "none";
+            desWorkspace.style.display = "none";
+            rsaWorkspace.style.display = "block";
 
         } else {
 
             aesWorkspace.style.display = "block";
-
             desWorkspace.style.display = "none";
+            rsaWorkspace.style.display = "none";
 
         }
 
     });
 
 });
+
+// ==========================================
+// RSA CRYPTOGRAPHY
+// ==========================================
+
+const rsaTab = document.getElementById("rsa-tab");
+const rsaWorkspace = document.getElementById("rsa-workspace");
+
+const rsaGenerateButton = document.getElementById("rsa-generate");
+
+const rsaPublicKey = document.getElementById("rsa-public-key");
+const rsaPrivateKey = document.getElementById("rsa-private-key");
+
+const rsaCopyPublic = document.getElementById("rsa-copy-public");
+const rsaCopyPrivate = document.getElementById("rsa-copy-private");
+
+const rsaText = document.getElementById("rsa-text");
+
+const rsaEncryptButton = document.getElementById("rsa-encrypt");
+const rsaDecryptButton = document.getElementById("rsa-decrypt");
+const rsaClearButton = document.getElementById("rsa-clear");
+
+const rsaMessage = document.getElementById("rsa-message");
+const rsaResult = document.getElementById("rsa-result");
+const rsaCopyResult = document.getElementById("rsa-copy-result");
+
+
+function showRSAMessage(message, type) {
+
+    rsaMessage.textContent = message;
+
+    rsaMessage.className = "crypto-message";
+
+    rsaMessage.classList.add(type);
+}
+
+
+// ==========================================
+// GENERATE RSA KEYS
+// ==========================================
+
+rsaGenerateButton.addEventListener("click", async () => {
+
+    showRSAMessage("Generating 2048-bit RSA keys...", "success");
+
+    rsaGenerateButton.disabled = true;
+
+    try {
+
+        const response = await fetch(
+            "/api/rsa/generate",
+            {
+                method: "POST"
+            }
+        );
+
+        const data = await response.json();
+
+        if (!data.success) {
+
+            showRSAMessage(
+                data.error,
+                "error"
+            );
+
+            return;
+        }
+
+        rsaPublicKey.value = data.public_key;
+        rsaPrivateKey.value = data.private_key;
+
+        rsaResult.value = "";
+
+        showRSAMessage(
+            "RSA key pair generated successfully.",
+            "success"
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        showRSAMessage(
+            "Unable to connect to the WatchByte server.",
+            "error"
+        );
+
+    } finally {
+
+        rsaGenerateButton.disabled = false;
+
+    }
+
+});
+
+
+// ==========================================
+// RSA ENCRYPT / DECRYPT
+// ==========================================
+
+async function performRSA(operation) {
+
+    const text = rsaText.value.trim();
+
+    let key;
+
+
+    if (operation === "encrypt") {
+
+        key = rsaPublicKey.value.trim();
+
+    } else {
+
+        key = rsaPrivateKey.value.trim();
+
+    }
+
+
+    if (!key) {
+
+        showRSAMessage(
+            operation === "encrypt"
+                ? "Generate or enter a public key first."
+                : "Generate or enter a private key first.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (!text) {
+
+        showRSAMessage(
+            "Please enter some text.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const response = await fetch(
+            "/api/rsa",
+            {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    operation: operation,
+
+                    key: key,
+
+                    text: text
+
+                })
+
+            }
+        );
+
+
+        const data = await response.json();
+
+
+        if (!data.success) {
+
+            showRSAMessage(
+                data.error,
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        rsaResult.value = data.result;
+
+
+        showRSAMessage(
+
+            operation === "encrypt"
+                ? "Text encrypted successfully."
+                : "Text decrypted successfully.",
+
+            "success"
+
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showRSAMessage(
+            "Unable to connect to the WatchByte server.",
+            "error"
+        );
+
+    }
+
+}
+
+
+// Encrypt
+
+rsaEncryptButton.addEventListener(
+    "click",
+    () => {
+
+        performRSA("encrypt");
+
+    }
+);
+
+
+// Decrypt
+
+rsaDecryptButton.addEventListener(
+    "click",
+    () => {
+
+        performRSA("decrypt");
+
+    }
+);
+
+
+// ==========================================
+// COPY BUTTONS
+// ==========================================
+
+rsaCopyPublic.addEventListener(
+    "click",
+    async () => {
+
+        if (!rsaPublicKey.value) {
+
+            showRSAMessage(
+                "No public key available.",
+                "error"
+            );
+
+            return;
+        }
+
+        await navigator.clipboard.writeText(
+            rsaPublicKey.value
+        );
+
+        showRSAMessage(
+            "Public key copied to clipboard.",
+            "success"
+        );
+
+    }
+);
+
+
+rsaCopyPrivate.addEventListener(
+    "click",
+    async () => {
+
+        if (!rsaPrivateKey.value) {
+
+            showRSAMessage(
+                "No private key available.",
+                "error"
+            );
+
+            return;
+        }
+
+        await navigator.clipboard.writeText(
+            rsaPrivateKey.value
+        );
+
+        showRSAMessage(
+            "Private key copied to clipboard.",
+            "success"
+        );
+
+    }
+);
+
+
+rsaCopyResult.addEventListener(
+    "click",
+    async () => {
+
+        if (!rsaResult.value) {
+
+            showRSAMessage(
+                "There is no result to copy.",
+                "error"
+            );
+
+            return;
+        }
+
+        await navigator.clipboard.writeText(
+            rsaResult.value
+        );
+
+        showRSAMessage(
+            "Result copied to clipboard.",
+            "success"
+        );
+
+    }
+);
+
+
+// ==========================================
+// CLEAR RSA
+// ==========================================
+
+rsaClearButton.addEventListener(
+    "click",
+    () => {
+
+        rsaText.value = "";
+
+        rsaResult.value = "";
+
+        rsaMessage.textContent = "";
+
+        rsaMessage.className = "crypto-message";
+
+    }
+);

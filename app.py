@@ -1,6 +1,11 @@
 from flask import Flask, render_template, request, jsonify
 from modules.cryptography.aes import encrypt_aes, decrypt_aes
 from modules.cryptography.des import encrypt_des, decrypt_des
+from modules.cryptography.rsa import (
+    generate_rsa_keys,
+    encrypt_rsa,
+    decrypt_rsa
+)
 
 app = Flask(__name__)
 
@@ -109,6 +114,67 @@ def des_operation():
             "success": False,
             "error": "Decryption failed. Check the key and encrypted data."
         }), 400
+@app.route("/api/rsa/generate", methods=["POST"])
+def rsa_generate_keys():
+    try:
+        public_key, private_key = generate_rsa_keys()
 
+        return jsonify({
+            "success": True,
+            "public_key": public_key,
+            "private_key": private_key
+        })
+
+    except Exception:
+        return jsonify({
+            "success": False,
+            "error": "Unable to generate RSA keys."
+        }), 500
+
+
+@app.route("/api/rsa", methods=["POST"])
+def rsa_operation():
+    try:
+        data = request.get_json()
+
+        operation = data.get("operation")
+        key = data.get("key", "")
+        text = data.get("text", "")
+
+        if not key:
+            return jsonify({
+                "success": False,
+                "error": "Please provide an RSA key."
+            }), 400
+
+        if not text.strip():
+            return jsonify({
+                "success": False,
+                "error": "Please enter some text."
+            }), 400
+
+        if operation == "encrypt":
+            result = encrypt_rsa(text, key)
+
+        elif operation == "decrypt":
+            result = decrypt_rsa(text, key)
+
+        else:
+            return jsonify({
+                "success": False,
+                "error": "Invalid RSA operation."
+            }), 400
+
+        return jsonify({
+            "success": True,
+            "result": result
+        })
+
+    except Exception:
+        return jsonify({
+            "success": False,
+            "error": "RSA operation failed. Check the key and encrypted data."
+        }), 400
+    
 if __name__ == "__main__":
     app.run(debug=True)
