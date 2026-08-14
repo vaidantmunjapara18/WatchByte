@@ -266,7 +266,7 @@
                         🔐 AES
                     </button>
 
-                    <button class="crypto-tab">
+                    <button class="crypto-tab" id="des-tab">
                         🔒 DES
                     </button>
 
@@ -408,6 +408,146 @@
 
                 </div>
 
+                <!-- DES workspace -->
+
+                <div
+                    class="crypto-workspace"
+                    id="des-workspace"
+                    style="display: none;">
+
+                    <div class="crypto-header">
+
+                        <div>
+                            <p class="eyebrow">DES</p>
+
+                            <h3>Data Encryption Standard</h3>
+
+                            <p class="legacy-warning">
+                                ⚠️ Legacy algorithm — educational use only
+                            </p>
+                        </div>
+
+                        <span class="algorithm-badge">
+                            DES-CBC
+                        </span>
+
+                    </div>
+
+
+                    <div class="crypto-info">
+
+                        <div>
+                            <strong>Key size</strong>
+                            <span>64 bit / 56 effective bits</span>
+                        </div>
+
+                        <div>
+                            <strong>Mode</strong>
+                            <span>CBC</span>
+                        </div>
+
+                        <div>
+                            <strong>Encoding</strong>
+                            <span>Base64</span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="crypto-form">
+
+                        <!-- DES Key -->
+
+                        <div class="input-group">
+
+                            <label for="des-key">
+
+                                DES Key
+
+                                <span>Exactly 8 characters</span>
+
+                            </label>
+
+                            <input
+                                type="text"
+                                id="des-key"
+                                placeholder="Example: 12345678"
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+
+                        <!-- DES Input -->
+
+                        <div class="input-group">
+
+                            <label for="des-text">
+                                Input Text
+                            </label>
+
+                            <textarea
+                                id="des-text"
+                                rows="7"
+                                placeholder="Enter text to encrypt or ciphertext to decrypt..."
+                            ></textarea>
+
+                        </div>
+
+
+                        <!-- DES Buttons -->
+
+                        <div class="crypto-actions">
+
+                            <button id="des-encrypt" class="primary-action">
+                                🔐 Encrypt
+                            </button>
+
+                            <button id="des-decrypt" class="secondary-action">
+                                🔓 Decrypt
+                            </button>
+
+                            <button id="des-clear" class="clear-action">
+                                Clear
+                            </button>
+
+                        </div>
+
+
+                        <!-- DES Message -->
+
+                        <div
+                            id="des-message"
+                            class="crypto-message">
+                        </div>
+
+
+                        <!-- DES Result -->
+
+                        <div class="result-container">
+
+                            <div class="result-header">
+
+                                <span>RESULT</span>
+
+                                <button id="des-copy">
+                                    Copy
+                                </button>
+
+                            </div>
+
+                            <textarea
+                                id="des-result"
+                                rows="7"
+                                readonly
+                                placeholder="Your DES result will appear here..."
+                            ></textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
             </section>
 
 

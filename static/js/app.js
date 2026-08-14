@@ -231,3 +231,276 @@ aesCopyButton.addEventListener("click", async () => {
     );
 
 });
+
+// ==========================================
+// DES CRYPTOGRAPHY
+// ==========================================
+
+const desTab = document.getElementById("des-tab");
+
+const desWorkspace = document.getElementById("des-workspace");
+
+const aesWorkspace = document.querySelector(
+    ".crypto-workspace:not(#des-workspace)"
+);
+
+
+const desKey = document.getElementById("des-key");
+const desText = document.getElementById("des-text");
+
+const desEncryptButton =
+    document.getElementById("des-encrypt");
+
+const desDecryptButton =
+    document.getElementById("des-decrypt");
+
+const desClearButton =
+    document.getElementById("des-clear");
+
+const desCopyButton =
+    document.getElementById("des-copy");
+
+const desResult =
+    document.getElementById("des-result");
+
+const desMessage =
+    document.getElementById("des-message");
+
+
+function showDESMessage(message, type) {
+
+    desMessage.textContent = message;
+
+    desMessage.className = "crypto-message";
+
+    desMessage.classList.add(type);
+
+}
+
+
+async function performDES(operation) {
+
+    const key = desKey.value.trim();
+
+    const text = desText.value;
+
+
+    desMessage.textContent = "";
+
+    desMessage.className = "crypto-message";
+
+
+    if (!key) {
+
+        showDESMessage(
+            "Please enter a DES key.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (key.length !== 8) {
+
+        showDESMessage(
+            "DES key must be exactly 8 characters.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (!text.trim()) {
+
+        showDESMessage(
+            "Please enter some text.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        const response = await fetch(
+            "/api/des",
+            {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    operation: operation,
+
+                    key: key,
+
+                    text: text
+
+                })
+
+            }
+        );
+
+
+        const data = await response.json();
+
+
+        if (!data.success) {
+
+            showDESMessage(
+                data.error,
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        desResult.value = data.result;
+
+
+        showDESMessage(
+
+            operation === "encrypt"
+
+                ? "Text encrypted successfully."
+
+                : "Text decrypted successfully.",
+
+            "success"
+
+        );
+
+
+    } catch (error) {
+
+        showDESMessage(
+            "Unable to connect to the WatchByte server.",
+            "error"
+        );
+
+        console.error(error);
+
+    }
+
+}
+
+
+desEncryptButton.addEventListener(
+    "click",
+    () => {
+
+        performDES("encrypt");
+
+    }
+);
+
+
+desDecryptButton.addEventListener(
+    "click",
+    () => {
+
+        performDES("decrypt");
+
+    }
+);
+
+
+desClearButton.addEventListener(
+    "click",
+    () => {
+
+        desKey.value = "";
+
+        desText.value = "";
+
+        desResult.value = "";
+
+        desMessage.textContent = "";
+
+        desMessage.className =
+            "crypto-message";
+
+    }
+);
+
+
+desCopyButton.addEventListener(
+    "click",
+    async () => {
+
+        if (!desResult.value) {
+
+            showDESMessage(
+                "There is no result to copy.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        await navigator.clipboard.writeText(
+            desResult.value
+        );
+
+
+        showDESMessage(
+            "Result copied to clipboard.",
+            "success"
+        );
+
+    }
+);
+
+// ==========================================
+// CRYPTOGRAPHY TAB SWITCHING
+// ==========================================
+
+const cryptoTabs =
+    document.querySelectorAll(".crypto-tab");
+
+
+cryptoTabs.forEach((tab) => {
+
+    tab.addEventListener("click", () => {
+
+        cryptoTabs.forEach((item) => {
+
+            item.classList.remove("active");
+
+        });
+
+
+        tab.classList.add("active");
+
+
+        if (tab.id === "des-tab") {
+
+            aesWorkspace.style.display = "none";
+
+            desWorkspace.style.display = "block";
+
+        } else {
+
+            aesWorkspace.style.display = "block";
+
+            desWorkspace.style.display = "none";
+
+        }
+
+    });
+
+});

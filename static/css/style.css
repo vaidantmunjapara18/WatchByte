@@ -1106,3 +1106,13 @@ button {
     }
 
 }
+
+.legacy-warning {
+    margin-top: 6px;
+
+    color: #ffb84d;
+
+    font-size: 10px;
+
+    font-weight: bold;
+}
