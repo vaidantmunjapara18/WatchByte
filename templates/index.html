@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>WatchByte</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-icon">W</div>
+
+                <div>
+                    <h1>WatchByte</h1>
+                    <span>Security Platform</span>
+                </div>
+            </div>
+
+            <nav class="navigation">
+
+                <p class="nav-title">MAIN</p>
+
+                <button class="nav-item active" data-section="dashboard">
+                    <span>⌂</span>
+                    Dashboard
+                </button>
+
+                <p class="nav-title">SECURITY</p>
+
+                <button class="nav-item" data-section="crypto">
+                    <span>🔐</span>
+                    Cryptography
+                </button>
+
+                <button class="nav-item" data-section="integrity">
+                    <span>#</span>
+                    Hash & Integrity
+                </button>
+
+                <button class="nav-item" data-section="auth">
+                    <span>♙</span>
+                    Authentication
+                </button>
+
+                <button class="nav-item" data-section="network">
+                    <span>🛡</span>
+                    Firewall & IDS
+                </button>
+
+                <p class="nav-title">SYSTEM</p>
+
+                <button class="nav-item" data-section="logs">
+                    <span>▤</span>
+                    Security Logs
+                </button>
+
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="status-dot"></div>
+                <div>
+                    <strong>System Online</strong>
+                    <small>Security engine ready</small>
+                </div>
+            </div>
+
+        </aside>
+
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- Top bar -->
+            <header class="topbar">
+
+                <div>
+                    <span class="breadcrumb">WATCHBYTE /</span>
+                    <span id="current-section">DASHBOARD</span>
+                </div>
+
+                <div class="system-status">
+                    <span class="status-dot"></span>
+                    SYSTEM ONLINE
+                </div>
+
+            </header>
+
+
+            <!-- Dashboard -->
+            <section id="dashboard" class="content-section active-section">
+
+                <div class="welcome">
+                    <div>
+                        <p class="eyebrow">SECURITY OVERVIEW</p>
+
+                        <h2>Welcome to <span>WatchByte</span></h2>
+
+                        <p>
+                            Monitor, analyze and understand information
+                            security concepts through an interactive laboratory.
+                        </p>
+                    </div>
+
+                    <div class="live-indicator">
+                        <span></span>
+                        LIVE
+                    </div>
+                </div>
+
+
+                <!-- Security Cards -->
+                <div class="security-grid">
+
+                    <div class="security-card">
+                        <div class="card-icon">🔐</div>
+                        <p>CRYPTOGRAPHY</p>
+                        <h3>4</h3>
+                        <span>AES · DES · RSA · DH</span>
+                    </div>
+
+                    <div class="security-card">
+                        <div class="card-icon">#</div>
+                        <p>INTEGRITY</p>
+                        <h3>3</h3>
+                        <span>SHA · HMAC · Files</span>
+                    </div>
+
+                    <div class="security-card">
+                        <div class="card-icon">♙</div>
+                        <p>AUTHENTICATION</p>
+                        <h3>3</h3>
+                        <span>Password · Login · CAPTCHA</span>
+                    </div>
+
+                    <div class="security-card">
+                        <div class="card-icon">🛡</div>
+                        <p>NETWORK SECURITY</p>
+                        <h3>2</h3>
+                        <span>Firewall · IDS</span>
+                    </div>
+
+                </div>
+
+
+                <!-- Lower dashboard -->
+                <div class="dashboard-grid">
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+                            <div>
+                                <p class="eyebrow">SECURITY ACTIVITY</p>
+                                <h3>Recent Events</h3>
+                            </div>
+
+                            <span class="online-label">
+                                ● LIVE
+                            </span>
+                        </div>
+
+                        <div class="event-list">
+
+                            <div class="event">
+                                <span class="event-icon success">✓</span>
+
+                                <div>
+                                    <strong>Security engine initialized</strong>
+                                    <small>System startup</small>
+                                </div>
+
+                                <time>Now</time>
+                            </div>
+
+                            <div class="event">
+                                <span class="event-icon success">✓</span>
+
+                                <div>
+                                    <strong>Cryptography module ready</strong>
+                                    <small>Crypto engine</small>
+                                </div>
+
+                                <time>Now</time>
+                            </div>
+
+                            <div class="event">
+                                <span class="event-icon info">i</span>
+
+                                <div>
+                                    <strong>Monitoring started</strong>
+                                    <small>WatchByte monitor</small>
+                                </div>
+
+                                <time>Now</time>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel quick-panel">
+
+                        <p class="eyebrow">QUICK ACCESS</p>
+                        <h3>Security Modules</h3>
+
+                        <button class="quick-button" data-section="crypto">
+                            🔐
+                            <span>
+                                <strong>Cryptography Lab</strong>
+                                <small>Encrypt & decrypt data</small>
+                            </span>
+                        </button>
+
+                        <button class="quick-button" data-section="integrity">
+                            #
+                            <span>
+                                <strong>Hash & Integrity</strong>
+                                <small>Verify data integrity</small>
+                            </span>
+                        </button>
+
+                        <button class="quick-button" data-section="network">
+                            🛡
+                            <span>
+                                <strong>Threat Monitor</strong>
+                                <small>Firewall & IDS</small>
+                            </span>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Other sections -->
+            <section id="crypto" class="content-section">
+                <div class="module-placeholder">
+                    <p class="eyebrow">CRYPTOGRAPHY LAB</p>
+                    <h2>Cryptography Workspace</h2>
+                    <p>
+                        AES, DES, RSA and Diffie-Hellman will be implemented here.
+                    </p>
+                </div>
+            </section>
+
+
+            <section id="integrity" class="content-section">
+                <div class="module-placeholder">
+                    <p class="eyebrow">HASH & INTEGRITY</p>
+                    <h2>Integrity Workspace</h2>
+                    <p>
+                        SHA-256, HMAC, file integrity and Birthday Problem demonstrations will be added here.
+                    </p>
+                </div>
+            </section>
+
+
+            <section id="auth" class="content-section">
+                <div class="module-placeholder">
+                    <p class="eyebrow">AUTHENTICATION</p>
+                    <h2>Authentication Workspace</h2>
+                    <p>
+                        Password security, login and CAPTCHA will be implemented here.
+                    </p>
+                </div>
+            </section>
+
+
+            <section id="network" class="content-section">
+                <div class="module-placeholder">
+                    <p class="eyebrow">NETWORK SECURITY</p>
+                    <h2>Firewall & IDS Workspace</h2>
+                    <p>
+                        Firewall rules, packet simulation and intrusion detection will be implemented here.
+                    </p>
+                </div>
+            </section>
+
+
+            <section id="logs" class="content-section">
+                <div class="module-placeholder">
+                    <p class="eyebrow">SECURITY LOGS</p>
+                    <h2>Security Event Log</h2>
+                    <p>
+                        Security events generated by WatchByte will appear here.
+                    </p>
+                </div>
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+</body>
+</html>
