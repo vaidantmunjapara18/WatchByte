@@ -723,3 +723,386 @@ button {
     }
 
 }
+
+/* ==========================================
+   CRYPTOGRAPHY LAB
+========================================== */
+
+.module-heading {
+    margin-bottom: 24px;
+}
+
+
+.module-heading h2 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+
+.module-description {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+.crypto-tabs {
+    display: flex;
+    gap: 8px;
+
+    margin-bottom: 18px;
+
+    border-bottom: 1px solid var(--border);
+
+    padding-bottom: 12px;
+}
+
+
+.crypto-tab {
+    border: 1px solid var(--border);
+
+    background: var(--panel);
+
+    color: var(--muted);
+
+    padding: 10px 16px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 11px;
+
+    transition: 0.2s;
+}
+
+
+.crypto-tab:hover {
+    color: var(--text);
+
+    border-color: rgba(0, 217, 255, 0.3);
+}
+
+
+.crypto-tab.active {
+    background: rgba(0, 217, 255, 0.12);
+
+    color: var(--accent);
+
+    border-color: rgba(0, 217, 255, 0.25);
+}
+
+
+.crypto-workspace {
+    background: var(--panel);
+
+    border: 1px solid var(--border);
+
+    border-radius: 12px;
+
+    padding: 24px;
+}
+
+
+.crypto-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    margin-bottom: 20px;
+}
+
+
+.crypto-header h3 {
+    font-size: 18px;
+}
+
+
+.algorithm-badge {
+    color: var(--accent);
+
+    background: rgba(0, 217, 255, 0.08);
+
+    border: 1px solid rgba(0, 217, 255, 0.2);
+
+    border-radius: 20px;
+
+    padding: 6px 10px;
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+}
+
+
+.crypto-info {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 10px;
+
+    margin-bottom: 24px;
+}
+
+
+.crypto-info div {
+    background: var(--panel-light);
+
+    border: 1px solid var(--border);
+
+    border-radius: 8px;
+
+    padding: 12px;
+}
+
+
+.crypto-info strong {
+    display: block;
+
+    font-size: 10px;
+
+    margin-bottom: 5px;
+}
+
+
+.crypto-info span {
+    color: var(--muted);
+
+    font-size: 10px;
+}
+
+
+.crypto-form {
+    max-width: 900px;
+}
+
+
+.input-group {
+    margin-bottom: 18px;
+}
+
+
+.input-group label {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 8px;
+
+    font-size: 11px;
+
+    font-weight: bold;
+}
+
+
+.input-group label span {
+    color: var(--muted);
+
+    font-size: 9px;
+
+    font-weight: normal;
+}
+
+
+.input-group input,
+.input-group textarea,
+.result-container textarea {
+    width: 100%;
+
+    border: 1px solid var(--border);
+
+    background: #081525;
+
+    color: var(--text);
+
+    border-radius: 8px;
+
+    padding: 12px;
+
+    font-family: monospace;
+
+    font-size: 12px;
+
+    outline: none;
+
+    resize: vertical;
+
+    transition: 0.2s;
+}
+
+
+.input-group input:focus,
+.input-group textarea:focus {
+    border-color: rgba(0, 217, 255, 0.5);
+
+    box-shadow: 0 0 0 2px rgba(0, 217, 255, 0.05);
+}
+
+
+.input-group input::placeholder,
+.input-group textarea::placeholder,
+.result-container textarea::placeholder {
+    color: #506176;
+}
+
+
+.crypto-actions {
+    display: flex;
+
+    gap: 8px;
+
+    margin-bottom: 15px;
+}
+
+
+.crypto-actions button {
+    border-radius: 7px;
+
+    padding: 10px 16px;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.primary-action {
+    background: var(--accent);
+
+    color: #04111c;
+
+    border: 1px solid var(--accent);
+}
+
+
+.primary-action:hover {
+    transform: translateY(-1px);
+
+    box-shadow: 0 4px 15px rgba(0, 217, 255, 0.15);
+}
+
+
+.secondary-action {
+    background: rgba(53, 229, 138, 0.08);
+
+    color: var(--success);
+
+    border: 1px solid rgba(53, 229, 138, 0.2);
+}
+
+
+.secondary-action:hover {
+    background: rgba(53, 229, 138, 0.14);
+}
+
+
+.clear-action {
+    background: transparent;
+
+    color: var(--muted);
+
+    border: 1px solid var(--border);
+}
+
+
+.clear-action:hover {
+    color: var(--text);
+}
+
+
+.crypto-message {
+    min-height: 20px;
+
+    margin-bottom: 10px;
+
+    font-size: 10px;
+
+    font-weight: bold;
+}
+
+
+.crypto-message.success {
+    color: var(--success);
+}
+
+
+.crypto-message.error {
+    color: #ff6b6b;
+}
+
+
+.result-container {
+    border-top: 1px solid var(--border);
+
+    padding-top: 18px;
+}
+
+
+.result-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 8px;
+}
+
+
+.result-header > span {
+    color: var(--accent);
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.5px;
+}
+
+
+.result-header button {
+    border: 1px solid var(--border);
+
+    background: transparent;
+
+    color: var(--muted);
+
+    padding: 5px 9px;
+
+    border-radius: 5px;
+
+    font-size: 9px;
+
+    cursor: pointer;
+}
+
+
+.result-header button:hover {
+    color: var(--text);
+
+    border-color: rgba(0, 217, 255, 0.3);
+}
+
+
+@media (max-width: 700px) {
+
+    .crypto-tabs {
+        overflow-x: auto;
+    }
+
+    .crypto-info {
+        grid-template-columns: 1fr;
+    }
+
+    .crypto-actions {
+        flex-wrap: wrap;
+    }
+
+}

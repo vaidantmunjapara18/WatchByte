@@ -245,13 +245,169 @@
 
             <!-- Other sections -->
             <section id="crypto" class="content-section">
-                <div class="module-placeholder">
-                    <p class="eyebrow">CRYPTOGRAPHY LAB</p>
-                    <h2>Cryptography Workspace</h2>
-                    <p>
-                        AES, DES, RSA and Diffie-Hellman will be implemented here.
-                    </p>
+
+                <div class="module-heading">
+                    <div>
+                        <p class="eyebrow">CRYPTOGRAPHY LAB</p>
+                        <h2>Cryptography Workspace</h2>
+                        <p class="module-description">
+                            Experiment with encryption algorithms and understand how
+                            cryptographic operations work.
+                        </p>
+                    </div>
                 </div>
+
+
+                <!-- Algorithm tabs -->
+
+                <div class="crypto-tabs">
+
+                    <button class="crypto-tab active">
+                        🔐 AES
+                    </button>
+
+                    <button class="crypto-tab">
+                        🔒 DES
+                    </button>
+
+                    <button class="crypto-tab">
+                        🔑 RSA
+                    </button>
+
+                    <button class="crypto-tab">
+                        ⇄ Diffie-Hellman
+                    </button>
+
+                </div>
+
+
+                <!-- AES workspace -->
+
+                <div class="crypto-workspace">
+
+                    <div class="crypto-header">
+
+                        <div>
+                            <p class="eyebrow">AES</p>
+                            <h3>Advanced Encryption Standard</h3>
+                        </div>
+
+                        <span class="algorithm-badge">
+                            AES-CBC
+                        </span>
+
+                    </div>
+
+
+                    <div class="crypto-info">
+
+                        <div>
+                            <strong>Key sizes</strong>
+                            <span>128 / 192 / 256 bit</span>
+                        </div>
+
+                        <div>
+                            <strong>Mode</strong>
+                            <span>CBC</span>
+                        </div>
+
+                        <div>
+                            <strong>Encoding</strong>
+                            <span>Base64</span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="crypto-form">
+
+                        <!-- Key -->
+
+                        <div class="input-group">
+
+                            <label for="aes-key">
+                                AES Key
+                                <span>16, 24 or 32 characters</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="aes-key"
+                                placeholder="Example: 1234567890123456"
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+
+                        <!-- Text -->
+
+                        <div class="input-group">
+
+                            <label for="aes-text">
+                                Input Text
+                            </label>
+
+                            <textarea
+                                id="aes-text"
+                                rows="7"
+                                placeholder="Enter text to encrypt or ciphertext to decrypt..."
+                            ></textarea>
+
+                        </div>
+
+
+                        <!-- Buttons -->
+
+                        <div class="crypto-actions">
+
+                            <button id="aes-encrypt" class="primary-action">
+                                🔐 Encrypt
+                            </button>
+
+                            <button id="aes-decrypt" class="secondary-action">
+                                🔓 Decrypt
+                            </button>
+
+                            <button id="aes-clear" class="clear-action">
+                                Clear
+                            </button>
+
+                        </div>
+
+
+                        <!-- Message -->
+
+                        <div id="aes-message" class="crypto-message"></div>
+
+
+                        <!-- Result -->
+
+                        <div class="result-container">
+
+                            <div class="result-header">
+
+                                <span>RESULT</span>
+
+                                <button id="aes-copy">
+                                    Copy
+                                </button>
+
+                            </div>
+
+                            <textarea
+                                id="aes-result"
+                                rows="7"
+                                readonly
+                                placeholder="Your encryption/decryption result will appear here..."
+                            ></textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
             </section>
 
 
