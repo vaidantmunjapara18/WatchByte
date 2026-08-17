@@ -1006,3 +1006,181 @@ hashCopyButton.addEventListener(
 
     }
 );
+
+// ==========================================
+// HMAC-SHA256
+// ==========================================
+
+const hmacKey = document.getElementById("hmac-key");
+const hmacText = document.getElementById("hmac-text");
+
+const hmacGenerateButton =
+    document.getElementById("hmac-generate");
+
+const hmacClearButton =
+    document.getElementById("hmac-clear");
+
+const hmacCopyButton =
+    document.getElementById("hmac-copy");
+
+const hmacResult =
+    document.getElementById("hmac-result");
+
+const hmacMessage =
+    document.getElementById("hmac-message");
+
+
+function showHmacMessage(message, type) {
+
+    hmacMessage.textContent = message;
+
+    hmacMessage.className = "crypto-message";
+
+    hmacMessage.classList.add(type);
+}
+
+
+async function generateHMAC() {
+
+    const text = hmacText.value;
+    const key = hmacKey.value;
+
+
+    hmacMessage.textContent = "";
+    hmacMessage.className = "crypto-message";
+
+
+    if (!text.trim()) {
+
+        showHmacMessage(
+            "Please enter some text.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (!key.trim()) {
+
+        showHmacMessage(
+            "Please enter a secret key.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const response = await fetch(
+            "/api/hmac",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    text: text,
+                    key: key
+                })
+            }
+        );
+
+
+        const data = await response.json();
+
+
+        if (!data.success) {
+
+            showHmacMessage(
+                data.error,
+                "error"
+            );
+
+            return;
+        }
+
+
+        hmacResult.value = data.result;
+
+
+        showHmacMessage(
+            "HMAC generated successfully.",
+            "success"
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showHmacMessage(
+            "Unable to connect to the WatchByte server.",
+            "error"
+        );
+    }
+}
+
+
+// Generate HMAC
+
+hmacGenerateButton.addEventListener(
+    "click",
+    () => {
+
+        generateHMAC();
+
+    }
+);
+
+
+// Clear HMAC
+
+hmacClearButton.addEventListener(
+    "click",
+    () => {
+
+        hmacKey.value = "";
+        hmacText.value = "";
+        hmacResult.value = "";
+
+        hmacMessage.textContent = "";
+        hmacMessage.className = "crypto-message";
+
+    }
+);
+
+
+// Copy HMAC
+
+hmacCopyButton.addEventListener(
+    "click",
+    async () => {
+
+        if (!hmacResult.value) {
+
+            showHmacMessage(
+                "There is no HMAC to copy.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        await navigator.clipboard.writeText(
+            hmacResult.value
+        );
+
+
+        showHmacMessage(
+            "HMAC copied to clipboard.",
+            "success"
+        );
+
+    }
+);

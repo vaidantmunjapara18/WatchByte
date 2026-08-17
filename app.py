@@ -7,6 +7,7 @@ from modules.cryptography.rsa import (
     decrypt_rsa
 )
 from modules.integrity.hash import sha256_hash
+from modules.integrity.hmac import hmac_sha256
 
 app = Flask(__name__)
 
@@ -195,6 +196,40 @@ def hash_operation():
         return jsonify({
             "success": True,
             "algorithm": "SHA-256",
+            "result": result
+        })
+
+    except Exception as error:
+        return jsonify({
+            "success": False,
+            "error": str(error)
+        }), 400
+
+@app.route("/api/hmac", methods=["POST"])
+def hmac_operation():
+    try:
+        data = request.get_json()
+
+        text = data.get("text", "")
+        key = data.get("key", "")
+
+        if not text:
+            return jsonify({
+                "success": False,
+                "error": "Please enter some text."
+            }), 400
+
+        if not key:
+            return jsonify({
+                "success": False,
+                "error": "Please enter a secret key."
+            }), 400
+
+        result = hmac_sha256(text, key)
+
+        return jsonify({
+            "success": True,
+            "algorithm": "HMAC-SHA256",
             "result": result
         })
 
