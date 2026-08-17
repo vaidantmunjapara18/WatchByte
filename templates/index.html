@@ -922,9 +922,13 @@
 
                     <!-- Explanation -->
 
-                    <!-- HMAC Workspace -->
+                    
 
-                   <div class="integrity-workspace">
+                </div>
+
+                   <!-- HMAC Workspace --> 
+
+                <div class="integrity-workspace">
 
                         <div class="crypto-header">
 
@@ -1087,7 +1091,198 @@
 
                         </div>
 
-                   </div>
+                </div>
+
+                <!-- File Integrity Workspace -->
+
+                <div class="integrity-workspace">
+
+                    <div class="crypto-header">
+
+                        <div>
+
+                            <p class="eyebrow">FILE INTEGRITY</p>
+
+                            <h3>File SHA-256 Verification</h3>
+
+                            <p class="integrity-info">
+                                Calculate a cryptographic fingerprint of a file
+                                and verify whether its contents have changed.
+                            </p>
+
+                        </div>
+
+                        <span class="algorithm-badge">
+                            FILE-SHA256
+                        </span>
+
+                    </div>
+
+
+                    <!-- Information -->
+
+                    <div class="crypto-info">
+
+                        <div>
+                            <strong>Algorithm</strong>
+                            <span>SHA-256</span>
+                        </div>
+
+                        <div>
+                            <strong>Output</strong>
+                            <span>256 bit</span>
+                        </div>
+
+                        <div>
+                            <strong>Purpose</strong>
+                            <span>Integrity Check</span>
+                        </div>
+
+                    </div>
+
+
+                    <!-- File Selection -->
+
+                    <div class="input-group">
+
+                        <label>
+                            Select File
+                        </label>
+
+                        <div class="custom-file-input">
+
+                            <span
+                                id="file-name-display"
+                                class="file-name-display"
+                            >
+                                📁 No file selected
+                            </span>
+
+                            <label
+                                for="file-input"
+                                class="browse-file-button"
+                            >
+                                📂 Browse File
+                            </label>
+
+                            <input
+                                type="file"
+                                id="file-input"
+                                hidden
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Selected File -->
+
+                    <div
+                        class="file-details"
+                        id="file-details"
+                    >
+
+                        <strong>Selected File</strong>
+
+                        <span id="selected-file-name">
+                            No file selected
+                        </span>
+
+                    </div>
+
+
+                    <!-- Actions -->
+
+                    <div class="crypto-actions">
+
+                        <button
+                            id="file-hash-generate"
+                            class="primary-action"
+                        >
+                            🔐 Calculate SHA-256
+                        </button>
+
+                        <button
+                            id="file-hash-clear"
+                            class="clear-action"
+                        >
+                            Clear
+                        </button>
+
+                    </div>
+
+
+                    <!-- Status -->
+
+                    <div
+                        id="file-hash-message"
+                        class="crypto-message"
+                    ></div>
+
+
+                    <!-- Result -->
+
+                    <div class="result-container">
+
+                        <div class="result-header">
+
+                            <span>FILE SHA-256 HASH</span>
+
+                            <button id="file-hash-copy">
+                                Copy
+                            </button>
+
+                        </div>
+
+                        <textarea
+                            id="file-hash-result"
+                            rows="5"
+                            readonly
+                            placeholder="The file SHA-256 hash will appear here..."
+                        ></textarea>
+
+                    </div>
+
+
+                    <!-- Explanation -->
+
+                    <div class="hash-explanation">
+
+                        <div>
+
+                            <strong>📁 File Fingerprint</strong>
+
+                            <p>
+                                SHA-256 creates a fixed-length fingerprint
+                                representing the contents of the file.
+                            </p>
+
+                        </div>
+
+                        <div>
+
+                            <strong>🔄 Change Detection</strong>
+
+                            <p>
+                                Even a small change to the file produces
+                                a different SHA-256 hash.
+                            </p>
+
+                        </div>
+
+                        <div>
+
+                            <strong>🛡 Integrity Verification</strong>
+
+                            <p>
+                                Compare a trusted hash with a newly calculated
+                                hash to detect file modifications.
+                            </p>
+
+                        </div>
+
+                    </div>
 
                 </div>
 

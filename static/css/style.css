@@ -1329,3 +1329,218 @@ button {
     }
 
 }
+
+/* ==========================================
+   FILE INTEGRITY
+   ========================================== */
+
+.file-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 18px;
+    padding: 14px 16px;
+
+    background: var(--panel-light);
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.file-details strong {
+    font-size: 11px;
+}
+
+.file-details span {
+    color: var(--muted);
+    font-size: 11px;
+
+    max-width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+#file-input {
+    cursor: pointer;
+}
+
+
+#file-hash-result {
+    min-height: 110px;
+    word-break: break-all;
+}
+
+
+/* File integrity responsive */
+
+@media (max-width: 700px) {
+
+    .file-details {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .file-details span {
+        max-width: 100%;
+    }
+
+}
+
+/* ==========================================
+   FILE INTEGRITY LAYOUT
+   ========================================== */
+
+.integrity-workspace {
+    margin-top: 24px;
+}
+
+
+/* Space between the three integrity workspaces */
+
+.integrity-workspace + .integrity-workspace {
+    margin-top: 24px;
+}
+
+
+/* Keep file selection and selected-file information
+   stacked vertically */
+
+.integrity-workspace .input-group {
+    margin-bottom: 16px;
+}
+
+.integrity-workspace .file-details {
+    margin-bottom: 16px;
+}
+
+
+/* Put Calculate and Clear below the file area */
+
+.integrity-workspace .crypto-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 4px;
+    margin-bottom: 24px;
+}
+
+
+/* Keep result separated from the buttons */
+
+.integrity-workspace .result-container {
+    margin-top: 20px;
+}
+
+/* ==========================================
+   CUSTOM FILE PICKER
+   ========================================== */
+
+.custom-file-input {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    min-height: 46px;
+
+    padding: 4px 5px 4px 14px;
+
+    background: var(--panel-dark);
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    box-sizing: border-box;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.custom-file-input:hover {
+    border-color: var(--accent);
+}
+
+
+.file-name-display {
+    color: var(--muted);
+
+    font-size: 13px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    min-width: 0;
+}
+
+
+.browse-file-button {
+    flex-shrink: 0;
+
+    padding: 8px 16px;
+
+    background: var(--panel-light);
+
+    color: var(--text);
+
+    border: 1px solid var(--border);
+    border-radius: 6px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.browse-file-button:hover {
+    background: var(--accent);
+    color: #001018;
+
+    border-color: var(--accent);
+}
+
+
+.custom-file-input:focus-within {
+    border-color: var(--accent);
+
+    box-shadow:
+        0 0 0 2px rgba(0, 212, 255, 0.12);
+}
+
+
+@media (max-width: 600px) {
+
+    .custom-file-input {
+        padding-left: 10px;
+    }
+
+    .browse-file-button {
+        padding: 7px 10px;
+    }
+
+}
+/* ==========================================
+   INTEGRITY WORKSPACE SPACING
+   ========================================== */
+
+.crypto-workspace,
+.integrity-workspace {
+    margin-bottom: 28px;
+}
+
+.crypto-workspace:last-child,
+.integrity-workspace:last-child {
+    margin-bottom: 0;
+}

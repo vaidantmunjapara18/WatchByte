@@ -8,6 +8,7 @@ from modules.cryptography.rsa import (
 )
 from modules.integrity.hash import sha256_hash
 from modules.integrity.hmac import hmac_sha256
+from modules.integrity.file_hash import calculate_file_sha256
 
 app = Flask(__name__)
 
@@ -231,6 +232,50 @@ def hmac_operation():
             "success": True,
             "algorithm": "HMAC-SHA256",
             "result": result
+        })
+
+    except Exception as error:
+        return jsonify({
+            "success": False,
+            "error": str(error)
+        }), 400
+
+@app.route("/api/file-hash", methods=["POST"])
+def file_hash_operation():
+    try:
+        if "file" not in request.files:
+            return jsonify({
+                "success": False,
+                "error": "Please select a file."
+            }), 400
+
+        file = request.files["file"]
+
+        if file.filename == "":
+            return jsonify({
+                "success": False,
+                "error": "Please select a file."
+            }), 400
+
+        # Save the uploaded file temporarily
+        import tempfile
+        import os
+
+        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+            file.save(temp_file.name)
+            temp_path = temp_file.name
+
+        try:
+            result = calculate_file_sha256(temp_path)
+
+        finally:
+            os.remove(temp_path)
+
+        return jsonify({
+            "success": True,
+            "algorithm": "SHA-256",
+            "filename": file.filename,
+            "hash": result
         })
 
     except Exception as error:

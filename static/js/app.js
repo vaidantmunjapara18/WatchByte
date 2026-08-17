@@ -1184,3 +1184,205 @@ hmacCopyButton.addEventListener(
 
     }
 );
+
+// ==========================================
+// FILE INTEGRITY - SHA-256
+// ==========================================
+
+const fileInput = document.getElementById("file-input");
+const fileNameDisplay =
+    document.getElementById("file-name-display");
+const fileHashGenerateButton =
+    document.getElementById("file-hash-generate");
+
+const fileHashClearButton =
+    document.getElementById("file-hash-clear");
+
+const fileHashCopyButton =
+    document.getElementById("file-hash-copy");
+
+const fileHashResult =
+    document.getElementById("file-hash-result");
+
+const fileHashMessage =
+    document.getElementById("file-hash-message");
+
+const selectedFileName =
+    document.getElementById("selected-file-name");
+
+
+// Show selected filename
+
+fileInput.addEventListener("change", function () {
+
+    if (fileInput.files.length === 0) {
+
+        fileNameDisplay.textContent =
+            "📁 No file selected";
+
+        selectedFileName.textContent =
+            "No file selected";
+
+        return;
+    }
+
+    const file = fileInput.files[0];
+
+    fileNameDisplay.textContent =
+        "📄 " + file.name;
+
+    selectedFileName.textContent =
+        file.name;
+
+});
+
+
+// Show file message
+
+function showFileHashMessage(message, type) {
+
+    fileHashMessage.textContent = message;
+
+    fileHashMessage.className =
+        "crypto-message";
+
+    fileHashMessage.classList.add(type);
+}
+
+
+// Calculate file hash
+
+async function calculateFileHash() {
+
+    if (fileInput.files.length === 0) {
+
+        showFileHashMessage(
+            "Please select a file.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    const file = fileInput.files[0];
+
+    const formData = new FormData();
+
+    formData.append("file", file);
+
+
+    try {
+
+        const response = await fetch(
+            "/api/file-hash",
+            {
+                method: "POST",
+                body: formData
+            }
+        );
+
+
+        const data = await response.json();
+
+
+        if (!data.success) {
+
+            showFileHashMessage(
+                data.error,
+                "error"
+            );
+
+            return;
+        }
+
+
+        fileHashResult.value = data.hash;
+
+
+        showFileHashMessage(
+            "File SHA-256 hash calculated successfully.",
+            "success"
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showFileHashMessage(
+            "Unable to connect to the WatchByte server.",
+            "error"
+        );
+
+    }
+
+}
+
+
+// Calculate button
+
+fileHashGenerateButton.addEventListener(
+    "click",
+    function () {
+
+        calculateFileHash();
+
+    }
+);
+
+
+// Clear
+
+fileHashClearButton.addEventListener(
+    "click",
+    function () {
+
+        fileInput.value = "";
+
+        fileNameDisplay.textContent =
+            "📁 No file selected";
+
+        selectedFileName.textContent =
+            "No file selected";
+
+        fileHashResult.value = "";
+
+        fileHashMessage.textContent = "";
+
+        fileHashMessage.className =
+            "crypto-message";
+
+    }
+);
+
+
+// Copy
+
+fileHashCopyButton.addEventListener(
+    "click",
+    async function () {
+
+        if (!fileHashResult.value) {
+
+            showFileHashMessage(
+                "There is no hash to copy.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        await navigator.clipboard.writeText(
+            fileHashResult.value
+        );
+
+
+        showFileHashMessage(
+            "File hash copied to clipboard.",
+            "success"
+        );
+
+    }
+);
