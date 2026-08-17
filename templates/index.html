@@ -783,14 +783,178 @@
             </section>
 
 
-            <section id="integrity" class="content-section">
-                <div class="module-placeholder">
-                    <p class="eyebrow">HASH & INTEGRITY</p>
-                    <h2>Integrity Workspace</h2>
-                    <p>
-                        SHA-256, HMAC, file integrity and Birthday Problem demonstrations will be added here.
-                    </p>
+           <section id="integrity" class="content-section">
+
+                <div class="module-heading">
+
+                    <div>
+                        <p class="eyebrow">HASH & INTEGRITY LAB</p>
+
+                        <h2>Hash & Integrity</h2>
+
+                        <p class="module-description">
+                            Generate cryptographic hashes and understand how
+                            hashing protects data integrity.
+                        </p>
+                    </div>
+
                 </div>
+
+
+                <!-- SHA-256 Workspace -->
+
+                <div class="integrity-workspace">
+
+                    <div class="crypto-header">
+
+                        <div>
+                            <p class="eyebrow">SHA-256</p>
+
+                            <h3>Secure Hash Algorithm 256-bit</h3>
+
+                            <p class="integrity-info">
+                                Generate a unique 256-bit fingerprint for your data.
+                            </p>
+                        </div>
+
+                        <span class="algorithm-badge">
+                            SHA-256
+                        </span>
+
+                    </div>
+
+
+                    <!-- Information -->
+
+                    <div class="crypto-info">
+
+                        <div>
+                            <strong>Output Size</strong>
+                            <span>256 bit</span>
+                        </div>
+
+                        <div>
+                            <strong>Format</strong>
+                            <span>64 hexadecimal characters</span>
+                        </div>
+
+                        <div>
+                            <strong>Type</strong>
+                            <span>One-way hash</span>
+                        </div>
+
+                    </div>
+
+
+                    <!-- Input -->
+
+                    <div class="crypto-form">
+
+                        <div class="input-group">
+
+                            <label for="hash-text">
+                                Input Text
+                            </label>
+
+                            <textarea
+                                id="hash-text"
+                                rows="7"
+                                placeholder="Enter text to generate its SHA-256 hash..."
+                            ></textarea>
+
+                        </div>
+
+
+                        <!-- Actions -->
+
+                        <div class="crypto-actions">
+
+                            <button
+                                id="hash-generate"
+                                class="primary-action"
+                            >
+                                # Generate SHA-256
+                            </button>
+
+                            <button
+                                id="hash-clear"
+                                class="clear-action"
+                            >
+                                Clear
+                            </button>
+
+                        </div>
+
+
+                        <!-- Message -->
+
+                        <div
+                            id="hash-message"
+                            class="crypto-message"
+                        ></div>
+
+
+                        <!-- Result -->
+
+                        <div class="result-container">
+
+                            <div class="result-header">
+
+                                <span>SHA-256 HASH</span>
+
+                                <button id="hash-copy">
+                                    Copy
+                                </button>
+
+                            </div>
+
+                            <textarea
+                                id="hash-result"
+                                rows="5"
+                                readonly
+                                placeholder="Your SHA-256 hash will appear here..."
+                            ></textarea>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Explanation -->
+
+                    <div class="hash-explanation">
+
+                        <div>
+                            <strong>🔒 One-Way Function</strong>
+
+                            <p>
+                                A cryptographic hash is designed to be
+                                computationally infeasible to reverse.
+                            </p>
+                        </div>
+
+                        <div>
+                            <strong>⚡ Avalanche Effect</strong>
+
+                            <p>
+                                Changing even a small part of the input
+                                produces a completely different hash.
+                            </p>
+                        </div>
+
+                        <div>
+                            <strong>🛡 Integrity Verification</strong>
+
+                            <p>
+                                The hash can be used as a fingerprint
+                                to detect whether data has changed.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
             </section>
 
 

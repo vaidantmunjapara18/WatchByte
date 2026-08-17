@@ -6,6 +6,7 @@ from modules.cryptography.rsa import (
     encrypt_rsa,
     decrypt_rsa
 )
+from modules.integrity.hash import sha256_hash
 
 app = Flask(__name__)
 
@@ -174,6 +175,33 @@ def rsa_operation():
         return jsonify({
             "success": False,
             "error": "RSA operation failed. Check the key and encrypted data."
+        }), 400
+
+@app.route("/api/hash", methods=["POST"])
+def hash_operation():
+    try:
+        data = request.get_json()
+
+        text = data.get("text", "")
+
+        if not text:
+            return jsonify({
+                "success": False,
+                "error": "Please enter some text."
+            }), 400
+
+        result = sha256_hash(text)
+
+        return jsonify({
+            "success": True,
+            "algorithm": "SHA-256",
+            "result": result
+        })
+
+    except Exception as error:
+        return jsonify({
+            "success": False,
+            "error": str(error)
         }), 400
     
 if __name__ == "__main__":

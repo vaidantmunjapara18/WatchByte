@@ -848,3 +848,161 @@ rsaClearButton.addEventListener(
 
     }
 );
+
+// ==========================================
+// SHA-256 HASHING
+// ==========================================
+
+const hashText = document.getElementById("hash-text");
+const hashGenerateButton = document.getElementById("hash-generate");
+const hashClearButton = document.getElementById("hash-clear");
+const hashCopyButton = document.getElementById("hash-copy");
+
+const hashResult = document.getElementById("hash-result");
+const hashMessage = document.getElementById("hash-message");
+
+
+function showHashMessage(message, type) {
+
+    hashMessage.textContent = message;
+
+    hashMessage.className = "crypto-message";
+
+    hashMessage.classList.add(type);
+
+}
+
+
+async function generateSHA256() {
+
+    const text = hashText.value;
+
+    hashMessage.textContent = "";
+    hashMessage.className = "crypto-message";
+
+
+    if (!text.trim()) {
+
+        showHashMessage(
+            "Please enter some text.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const response = await fetch(
+            "/api/hash",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    text: text
+                })
+            }
+        );
+
+
+        const data = await response.json();
+
+
+        if (!data.success) {
+
+            showHashMessage(
+                data.error,
+                "error"
+            );
+
+            return;
+        }
+
+
+        hashResult.value = data.result;
+
+
+        showHashMessage(
+            "SHA-256 hash generated successfully.",
+            "success"
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showHashMessage(
+            "Unable to connect to the WatchByte server.",
+            "error"
+        );
+
+    }
+
+}
+
+
+// Generate hash
+
+hashGenerateButton.addEventListener(
+    "click",
+    () => {
+
+        generateSHA256();
+
+    }
+);
+
+
+// Clear
+
+hashClearButton.addEventListener(
+    "click",
+    () => {
+
+        hashText.value = "";
+
+        hashResult.value = "";
+
+        hashMessage.textContent = "";
+
+        hashMessage.className = "crypto-message";
+
+    }
+);
+
+
+// Copy hash
+
+hashCopyButton.addEventListener(
+    "click",
+    async () => {
+
+        if (!hashResult.value) {
+
+            showHashMessage(
+                "There is no hash to copy.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        await navigator.clipboard.writeText(
+            hashResult.value
+        );
+
+
+        showHashMessage(
+            "SHA-256 hash copied to clipboard.",
+            "success"
+        );
+
+    }
+);
