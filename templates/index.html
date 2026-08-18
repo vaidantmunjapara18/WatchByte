@@ -1290,12 +1290,159 @@
 
 
             <section id="auth" class="content-section">
-                <div class="module-placeholder">
-                    <p class="eyebrow">AUTHENTICATION</p>
-                    <h2>Authentication Workspace</h2>
-                    <p>
-                        Password security, login and CAPTCHA will be implemented here.
-                    </p>
+                <div class="crypto-workspace">
+
+                    <div class="crypto-header">
+                        <div>
+                            <span class="crypto-label">AUTHENTICATION</span>
+                            <h2>Authentication Workspace</h2>
+                            <p class="crypto-info">
+                                Secure user authentication using password hashing and verification.
+                            </p>
+                        </div>
+
+                        <span class="algorithm-badge">SECURE AUTH</span>
+                    </div>
+
+                    <!-- Authentication Information -->
+                    <div class="crypto-info-grid">
+
+                        <div class="info-card">
+                            <strong>🔐 Password Security</strong>
+                            <p>Passwords are securely hashed before being stored.</p>
+                        </div>
+
+                        <div class="info-card">
+                            <strong>🛡️ Verification</strong>
+                            <p>Passwords are verified against their secure hashes.</p>
+                        </div>
+
+                        <div class="info-card">
+                            <strong>👤 Authentication</strong>
+                            <p>Register and authenticate users through the API.</p>
+                        </div>
+
+                    </div>
+
+                    <!-- Register -->
+                    <div class="auth-panel">
+
+                        <div class="auth-panel-header">
+                            <div>
+                                <span class="crypto-label">REGISTER</span>
+                                <h3>Create Account</h3>
+                                <p class="crypto-info">
+                                    Create a new WatchByte user account.
+                                </p>
+                            </div>
+
+                            <span class="algorithm-badge">REGISTER</span>
+                        </div>
+
+                        <label for="register-username">Username</label>
+
+                        <input
+                            type="text"
+                            id="register-username"
+                            placeholder="Enter username..."
+                        >
+
+                        <label for="register-password">Password</label>
+
+                        <input
+                            type="password"
+                            id="register-password"
+                            placeholder="Enter password..."
+                        >
+
+                        <div class="button-group">
+                            <button id="register-button" class="primary-button">
+                                👤 Register
+                            </button>
+
+                            <button id="register-clear" class="secondary-button">
+                                Clear
+                            </button>
+                        </div>
+
+                        <div id="register-message"></div>
+
+                    </div>
+
+                    <!-- Login -->
+                    <div class="auth-panel">
+
+                        <div class="auth-panel-header">
+                            <div>
+                                <span class="crypto-label">LOGIN</span>
+                                <h3>Authenticate User</h3>
+                                <p class="crypto-info">
+                                    Verify your username and password.
+                                </p>
+                            </div>
+
+                            <span class="algorithm-badge">LOGIN</span>
+                        </div>
+
+                        <label for="login-username">Username</label>
+
+                        <input
+                            type="text"
+                            id="login-username"
+                            placeholder="Enter username..."
+                        >
+
+                        <label for="login-password">Password</label>
+
+                        <input
+                            type="password"
+                            id="login-password"
+                            placeholder="Enter password..."
+                        >
+
+                        <div class="button-group">
+                            <button id="login-button" class="primary-button">
+                                🔑 Login
+                            </button>
+
+                            <button id="login-clear" class="secondary-button">
+                                Clear
+                            </button>
+                        </div>
+
+                        <div id="login-message"></div>
+
+                    </div>
+
+                    <!-- Authentication Concepts -->
+                    <div class="crypto-info-grid">
+
+                        <div class="info-card">
+                            <strong>🔒 Hashing</strong>
+                            <p>
+                                Passwords are transformed into secure hashes instead of
+                                being stored as plain text.
+                            </p>
+                        </div>
+
+                        <div class="info-card">
+                            <strong>⚡ Scrypt</strong>
+                            <p>
+                                WatchByte uses a password-hashing algorithm designed to
+                                make password cracking more difficult.
+                            </p>
+                        </div>
+
+                        <div class="info-card">
+                            <strong>🛡️ Secure Login</strong>
+                            <p>
+                                Authentication succeeds only when the supplied password
+                                matches the stored password hash.
+                            </p>
+                        </div>
+
+                    </div>
+
                 </div>
             </section>
 

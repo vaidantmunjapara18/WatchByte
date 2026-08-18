@@ -1386,3 +1386,306 @@ fileHashCopyButton.addEventListener(
 
     }
 );
+
+// ==========================================
+// AUTHENTICATION
+// ==========================================
+
+const registerUsername =
+    document.getElementById("register-username");
+
+const registerPassword =
+    document.getElementById("register-password");
+
+const registerButton =
+    document.getElementById("register-button");
+
+const registerClearButton =
+    document.getElementById("register-clear");
+
+const registerMessage =
+    document.getElementById("register-message");
+
+
+const loginUsername =
+    document.getElementById("login-username");
+
+const loginPassword =
+    document.getElementById("login-password");
+
+const loginButton =
+    document.getElementById("login-button");
+
+const loginClearButton =
+    document.getElementById("login-clear");
+
+const loginMessage =
+    document.getElementById("login-message");
+
+
+// ==========================================
+// AUTHENTICATION MESSAGES
+// ==========================================
+
+function showRegisterMessage(message, type) {
+
+    registerMessage.textContent = message;
+    registerMessage.className = "auth-message";
+    registerMessage.classList.add(type);
+
+}
+
+
+function showLoginMessage(message, type) {
+
+    loginMessage.textContent = message;
+    loginMessage.className = "auth-message";
+    loginMessage.classList.add(type);
+
+}
+
+
+// ==========================================
+// REGISTER USER
+// ==========================================
+
+async function registerUser() {
+
+    const username = registerUsername.value.trim();
+    const password = registerPassword.value;
+
+    registerMessage.textContent = "";
+    registerMessage.className = "auth-message";
+
+
+    if (!username) {
+
+        showRegisterMessage(
+            "Please enter a username.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (!password) {
+
+        showRegisterMessage(
+            "Please enter a password.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const response = await fetch(
+            "/api/auth/register",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            }
+        );
+
+
+        const data = await response.json();
+
+
+        if (!data.success) {
+
+            showRegisterMessage(
+                data.message || data.error,
+                "error"
+            );
+
+            return;
+        }
+
+
+        showRegisterMessage(
+            "User registered successfully.",
+            "success"
+        );
+
+
+        registerPassword.value = "";
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showRegisterMessage(
+            "Unable to connect to the WatchByte server.",
+            "error"
+        );
+
+    }
+
+}
+
+
+// ==========================================
+// LOGIN USER
+// ==========================================
+
+async function loginUser() {
+
+    const username = loginUsername.value.trim();
+    const password = loginPassword.value;
+
+    loginMessage.textContent = "";
+    loginMessage.className = "auth-message";
+
+
+    if (!username) {
+
+        showLoginMessage(
+            "Please enter a username.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (!password) {
+
+        showLoginMessage(
+            "Please enter a password.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const response = await fetch(
+            "/api/auth/login",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            }
+        );
+
+
+        const data = await response.json();
+
+
+        if (!data.success) {
+
+            showLoginMessage(
+                data.message || data.error,
+                "error"
+            );
+
+            return;
+        }
+
+
+        showLoginMessage(
+            "Login successful.",
+            "success"
+        );
+
+
+        loginPassword.value = "";
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showLoginMessage(
+            "Unable to connect to the WatchByte server.",
+            "error"
+        );
+
+    }
+
+}
+
+
+// ==========================================
+// REGISTER BUTTON
+// ==========================================
+
+registerButton.addEventListener(
+    "click",
+    () => {
+
+        registerUser();
+
+    }
+);
+
+
+// ==========================================
+// LOGIN BUTTON
+// ==========================================
+
+loginButton.addEventListener(
+    "click",
+    () => {
+
+        loginUser();
+
+    }
+);
+
+
+// ==========================================
+// CLEAR REGISTER
+// ==========================================
+
+registerClearButton.addEventListener(
+    "click",
+    () => {
+
+        registerUsername.value = "";
+        registerPassword.value = "";
+
+        registerMessage.textContent = "";
+        registerMessage.className = "auth-message";
+
+    }
+);
+
+
+// ==========================================
+// CLEAR LOGIN
+// ==========================================
+
+loginClearButton.addEventListener(
+    "click",
+    () => {
+
+        loginUsername.value = "";
+        loginPassword.value = "";
+
+        loginMessage.textContent = "";
+        loginMessage.className = "auth-message";
+
+    }
+);

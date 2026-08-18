@@ -1544,3 +1544,257 @@ button {
 .integrity-workspace:last-child {
     margin-bottom: 0;
 }
+
+/* ==========================================
+   AUTHENTICATION LAB
+   ========================================== */
+
+.crypto-workspace {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+}
+
+/* Authentication Header */
+
+.crypto-workspace .crypto-header {
+    margin-bottom: 28px;
+}
+
+.crypto-workspace .crypto-header h2 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.crypto-workspace .crypto-header .crypto-info {
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+
+/* ==========================================
+   AUTHENTICATION INFORMATION CARDS
+   ========================================== */
+
+.crypto-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+}
+
+.crypto-info-grid .info-card {
+    background: var(--panel-light);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+}
+
+.crypto-info-grid .info-card strong {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 12px;
+}
+
+.crypto-info-grid .info-card p {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+
+/* ==========================================
+   REGISTER / LOGIN PANELS
+   ========================================== */
+
+.auth-panel {
+    margin-top: 24px;
+    padding: 24px;
+    background: var(--panel-light);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+.auth-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 22px;
+}
+
+.auth-panel-header .crypto-label {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.auth-panel-header h3 {
+    font-size: 20px;
+    margin-bottom: 6px;
+}
+
+.auth-panel-header .crypto-info {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+
+/* ==========================================
+   AUTHENTICATION INPUTS
+   ========================================== */
+
+.auth-panel > label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.auth-panel > input {
+    width: 100%;
+    border: 1px solid var(--border);
+    background: #081525;
+    color: var(--text);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 16px;
+    font-family: monospace;
+    font-size: 12px;
+    outline: none;
+    transition: 0.2s;
+}
+
+.auth-panel > input:focus {
+    border-color: rgba(0, 217, 255, 0.5);
+    box-shadow: 0 0 0 2px rgba(0, 217, 255, 0.05);
+}
+
+.auth-panel > input::placeholder {
+    color: #506176;
+}
+
+
+/* ==========================================
+   AUTHENTICATION BUTTONS
+   ========================================== */
+
+.button-group {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.button-group button {
+    border-radius: 7px;
+    padding: 10px 16px;
+    font-size: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+
+/* Register / Login button */
+
+.button-group .primary-button {
+    background: var(--accent);
+    color: #04111c;
+    border: 1px solid var(--accent);
+}
+
+.button-group .primary-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(0, 217, 255, 0.15);
+}
+
+
+/* Clear button */
+
+.button-group .secondary-button {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+}
+
+.button-group .secondary-button:hover {
+    color: var(--text);
+    border-color: rgba(0, 217, 255, 0.3);
+}
+
+
+/* ==========================================
+   AUTHENTICATION MESSAGES
+   ========================================== */
+
+#register-message,
+#login-message {
+    min-height: 20px;
+    margin-top: 12px;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+#register-message.success,
+#login-message.success {
+    color: var(--success);
+}
+
+#register-message.error,
+#login-message.error {
+    color: #ff6b6b;
+}
+
+
+/* ==========================================
+   AUTHENTICATION CONCEPT CARDS
+   ========================================== */
+
+.crypto-workspace > .crypto-info-grid:last-child {
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+
+.crypto-workspace > .crypto-info-grid:last-child .info-card {
+    transition: 0.2s;
+}
+
+.crypto-workspace > .crypto-info-grid:last-child .info-card:hover {
+    border-color: rgba(0, 217, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 900px) {
+
+    .crypto-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .crypto-workspace {
+        padding: 20px;
+    }
+
+    .auth-panel {
+        padding: 20px;
+    }
+
+    .auth-panel-header {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .button-group {
+        flex-wrap: wrap;
+    }
+
+}

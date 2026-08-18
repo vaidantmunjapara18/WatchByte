@@ -9,6 +9,7 @@ from modules.cryptography.rsa import (
 from modules.integrity.hash import sha256_hash
 from modules.integrity.hmac import hmac_sha256
 from modules.integrity.file_hash import calculate_file_sha256
+from modules.authentication.auth import register_user, login_user
 
 app = Flask(__name__)
 
@@ -277,6 +278,73 @@ def file_hash_operation():
             "filename": file.filename,
             "hash": result
         })
+
+    except Exception as error:
+        return jsonify({
+            "success": False,
+            "error": str(error)
+        }), 400
+
+@app.route("/api/auth/register", methods=["POST"])
+def auth_register():
+    try:
+        data = request.get_json()
+
+        username = data.get("username", "").strip()
+        password = data.get("password", "")
+
+        if not username:
+            return jsonify({
+                "success": False,
+                "error": "Please enter a username."
+            }), 400
+
+        if not password:
+            return jsonify({
+                "success": False,
+                "error": "Please enter a password."
+            }), 400
+
+        result = register_user(username, password)
+
+        if not result["success"]:
+            return jsonify(result), 400
+
+        return jsonify(result), 200
+
+    except Exception as error:
+        return jsonify({
+            "success": False,
+            "error": str(error)
+        }), 400
+
+
+@app.route("/api/auth/login", methods=["POST"])
+def auth_login():
+    try:
+        data = request.get_json()
+
+        username = data.get("username", "").strip()
+        password = data.get("password", "")
+
+        if not username:
+            return jsonify({
+                "success": False,
+                "error": "Please enter a username."
+            }), 400
+
+        if not password:
+            return jsonify({
+                "success": False,
+                "error": "Please enter a password."
+            }), 400
+
+        result = login_user(username, password)
+
+        if not result["success"]:
+            return jsonify(result), 401
+
+        return jsonify(result), 200
 
     except Exception as error:
         return jsonify({
