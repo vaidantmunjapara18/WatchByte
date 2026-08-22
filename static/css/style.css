@@ -1798,3 +1798,387 @@ button {
     }
 
 }
+
+/* ==========================================
+   NETWORK SECURITY / FIREWALL + IDS
+========================================== */
+
+.network-workspace {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+}
+
+
+/* ==========================================
+   NETWORK HEADER
+========================================== */
+
+.network-workspace > .crypto-header {
+    margin-bottom: 24px;
+}
+
+.network-workspace > .crypto-header h2 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.network-workspace > .crypto-header > div > p:not(.eyebrow) {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* ==========================================
+   NETWORK INFORMATION CARDS
+========================================== */
+
+.network-info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.network-info > div {
+    background: var(--panel-light);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    transition: 0.2s;
+}
+
+.network-info > div:hover {
+    border-color: rgba(0, 217, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+.network-info strong {
+    display: block;
+    font-size: 11px;
+    margin-bottom: 6px;
+}
+
+.network-info p {
+    color: var(--muted);
+    font-size: 10px;
+}
+
+
+/* ==========================================
+   NETWORK SECTIONS
+========================================== */
+
+.network-section {
+    background: var(--panel-light);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 18px;
+}
+
+.network-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.network-section-header h3 {
+    font-size: 18px;
+    margin-bottom: 6px;
+}
+
+.network-section-header p:not(.eyebrow) {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+
+/* ==========================================
+   NETWORK FORM
+========================================== */
+
+.network-form {
+    max-width: 900px;
+}
+
+.network-form .input-group {
+    margin-bottom: 18px;
+}
+
+.network-form .input-group input,
+.network-form .input-group select {
+    width: 100%;
+    border: 1px solid var(--border);
+    background: #081525;
+    color: var(--text);
+    border-radius: 8px;
+    padding: 12px;
+    font-family: monospace;
+    font-size: 12px;
+    outline: none;
+    transition: 0.2s;
+}
+
+.network-form .input-group input:focus,
+.network-form .input-group select:focus {
+    border-color: rgba(0, 217, 255, 0.5);
+    box-shadow: 0 0 0 2px rgba(0, 217, 255, 0.05);
+}
+
+.network-form .input-group input::placeholder {
+    color: #506176;
+}
+
+
+/* ==========================================
+   NETWORK ACTION BUTTONS
+========================================== */
+
+.network-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.network-actions button {
+    border-radius: 7px;
+    padding: 10px 16px;
+    font-size: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.network-actions .primary-action:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(0, 217, 255, 0.15);
+}
+
+.network-actions .clear-action:hover {
+    color: var(--text);
+}
+
+
+/* ==========================================
+   NETWORK MESSAGE
+========================================== */
+
+.network-message {
+    min-height: 20px;
+    margin-top: 12px;
+    margin-bottom: 0;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.network-message.success {
+    color: var(--success);
+}
+
+.network-message.error {
+    color: #ff6b6b;
+}
+
+
+/* ==========================================
+   NETWORK RESULT
+========================================== */
+
+.network-result {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+
+/* ==========================================
+   FINAL SECURITY DECISION
+========================================== */
+
+.network-decision {
+    grid-column: 1 / -1;
+
+    background: #081525;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    padding: 18px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 2px;
+}
+
+.result-label {
+    color: var(--muted);
+    font-size: 9px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+}
+
+.network-decision strong {
+    color: var(--accent);
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+
+
+/* ==========================================
+   FIREWALL / IDS RESULT CARDS
+========================================== */
+
+.network-result-card {
+    background: #081525;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+
+    min-height: 120px;
+
+    transition: 0.2s;
+}
+
+.network-result-card:hover {
+    border-color: rgba(0, 217, 255, 0.25);
+}
+
+.network-result-card > strong {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 12px;
+}
+
+.network-result-card > p {
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.network-result-card > small {
+    color: var(--muted);
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+
+/* ==========================================
+   NETWORK EXPLANATION
+========================================== */
+
+.network-explanation {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.network-explanation > div {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.network-explanation strong {
+    display: block;
+    font-size: 11px;
+    margin-bottom: 8px;
+}
+
+.network-explanation p {
+    color: var(--muted);
+    font-size: 10px;
+    line-height: 1.6;
+}
+
+
+/* ==========================================
+   NETWORK RESPONSIVE DESIGN
+========================================== */
+
+@media (max-width: 1000px) {
+
+    .network-info {
+        grid-template-columns: 1fr;
+    }
+
+    .network-result {
+        grid-template-columns: 1fr;
+    }
+
+    .network-decision {
+        grid-column: auto;
+    }
+
+    .network-explanation {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .network-workspace {
+        padding: 16px;
+    }
+
+    .network-section {
+        padding: 16px;
+    }
+
+    .network-section-header {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .network-actions {
+        flex-direction: column;
+    }
+
+    .network-actions button {
+        width: 100%;
+    }
+
+    .network-decision {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+}
+
+/* ==========================================
+   NETWORK SECURITY STATUS COLORS
+========================================== */
+
+.network-decision strong.allow {
+    color: var(--success);
+}
+
+.network-decision strong.block {
+    color: #ff6b6b;
+}
+
+.network-decision strong.alert {
+    color: #ffb84d;
+}
+
+.network-result-card .allow {
+    color: var(--success);
+}
+
+.network-result-card .block {
+    color: #ff6b6b;
+}
+
+.network-result-card .alert {
+    color: #ffb84d;
+}

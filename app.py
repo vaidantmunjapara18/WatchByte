@@ -10,6 +10,7 @@ from modules.integrity.hash import sha256_hash
 from modules.integrity.hmac import hmac_sha256
 from modules.integrity.file_hash import calculate_file_sha256
 from modules.authentication.auth import register_user, login_user
+from modules.network.network_engine import analyze_network_request
 
 app = Flask(__name__)
 
@@ -345,6 +346,64 @@ def auth_login():
             return jsonify(result), 401
 
         return jsonify(result), 200
+
+    except Exception as error:
+        return jsonify({
+            "success": False,
+            "error": str(error)
+        }), 400
+
+@app.route("/api/network/analyze", methods=["POST"])
+def analyze_network():
+    try:
+        data = request.get_json()
+
+        source_ip = data.get("source_ip", "").strip()
+        destination_port = data.get("destination_port")
+        protocol = data.get("protocol", "").strip()
+        connection_attempts = data.get("connection_attempts")
+
+        if not source_ip:
+            return jsonify({
+                "success": False,
+                "error": "Please enter a source IP address."
+            }), 400
+
+        if destination_port is None:
+            return jsonify({
+                "success": False,
+                "error": "Please enter a destination port."
+            }), 400
+
+        if not protocol:
+            return jsonify({
+                "success": False,
+                "error": "Please enter a protocol."
+            }), 400
+
+        if connection_attempts is None:
+            return jsonify({
+                "success": False,
+                "error": "Please enter connection attempts."
+            }), 400
+
+        result = analyze_network_request(
+            source_ip,
+            int(destination_port),
+            protocol,
+            int(connection_attempts)
+        )
+
+        return jsonify({
+            "success": True,
+            "result": result
+        }), 200
+
+    except (ValueError, TypeError):
+        return jsonify({
+            "success": False,
+            "error": "Port and connection attempts must be numbers."
+        }), 400
 
     except Exception as error:
         return jsonify({

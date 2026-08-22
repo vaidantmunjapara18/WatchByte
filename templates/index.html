@@ -1448,12 +1448,284 @@
 
 
             <section id="network" class="content-section">
-                <div class="module-placeholder">
-                    <p class="eyebrow">NETWORK SECURITY</p>
-                    <h2>Firewall & IDS Workspace</h2>
-                    <p>
-                        Firewall rules, packet simulation and intrusion detection will be implemented here.
-                    </p>
+                <div class="network-workspace">
+
+                    <!-- Network Header -->
+                    <div class="crypto-header">
+
+                        <div>
+                            <p class="eyebrow">NETWORK SECURITY</p>
+
+                            <h2>Firewall & IDS Workspace</h2>
+
+                            <p>
+                                Simulate network traffic and analyze it using
+                                firewall rules and intrusion detection.
+                            </p>
+                        </div>
+
+                        <span class="algorithm-badge">
+                            FIREWALL + IDS
+                        </span>
+
+                    </div>
+
+
+                    <!-- Network Information -->
+                    <div class="network-info">
+
+                        <div>
+                            <strong>Firewall</strong>
+                            <p>Rule-based traffic filtering</p>
+                        </div>
+
+                        <div>
+                            <strong>IDS</strong>
+                            <p>Suspicious activity detection</p>
+                        </div>
+
+                        <div>
+                            <strong>Decision</strong>
+                            <p>Allow, block or alert</p>
+                        </div>
+
+                    </div>
+
+
+                    <!-- Traffic Simulation -->
+                    <div class="network-section">
+
+                        <div class="network-section-header">
+
+                            <div>
+                                <p class="eyebrow">TRAFFIC SIMULATION</p>
+
+                                <h3>Analyze Network Request</h3>
+
+                                <p>
+                                    Enter simulated network traffic to test
+                                    WatchByte's firewall and IDS engine.
+                                </p>
+                            </div>
+
+                            <span class="algorithm-badge">
+                                NETWORK ANALYSIS
+                            </span>
+
+                        </div>
+
+
+                        <div class="network-form">
+
+                            <!-- Source IP -->
+                            <div class="input-group">
+
+                                <label for="network-source-ip">
+                                    Source IP
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="network-source-ip"
+                                    placeholder="192.168.1.10"
+                                >
+
+                            </div>
+
+
+                            <!-- Destination Port -->
+                            <div class="input-group">
+
+                                <label for="network-port">
+                                    Destination Port
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="network-port"
+                                    placeholder="443"
+                                >
+
+                            </div>
+
+
+                            <!-- Protocol -->
+                            <div class="input-group">
+
+                                <label for="network-protocol">
+                                    Protocol
+                                </label>
+
+                                <select id="network-protocol">
+
+                                    <option value="tcp">TCP</option>
+                                    <option value="udp">UDP</option>
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- Connection Attempts -->
+                            <div class="input-group">
+
+                                <label for="network-attempts">
+                                    Connection Attempts
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="network-attempts"
+                                    placeholder="1"
+                                    min="1"
+                                >
+
+                            </div>
+
+
+                            <!-- Actions -->
+                            <div class="network-actions">
+
+                                <button
+                                    type="button"
+                                    id="network-analyze"
+                                    class="primary-action"
+                                >
+                                    🛡️ Analyze Traffic
+                                </button>
+
+                                <button
+                                    type="button"
+                                    id="network-clear"
+                                    class="clear-action"
+                                >
+                                    Clear
+                                </button>
+
+                            </div>
+
+
+                            <!-- Message -->
+                            <p
+                                id="network-message"
+                                class="network-message"
+                            ></p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Analysis Result -->
+                    <div class="network-section">
+
+                        <div class="network-section-header">
+
+                            <div>
+                                <p class="eyebrow">SECURITY ANALYSIS</p>
+
+                                <h3>Network Analysis Result</h3>
+
+                                <p>
+                                    Firewall and IDS results for the simulated traffic.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="network-result">
+
+                            <!-- Final Decision -->
+                            <div class="network-decision">
+
+                                <span class="result-label">
+                                    FINAL DECISION
+                                </span>
+
+                                <strong id="network-final-action">
+                                    Awaiting analysis...
+                                </strong>
+
+                            </div>
+
+
+                            <!-- Firewall Result -->
+                            <div class="network-result-card">
+
+                                <strong>🛡️ Firewall</strong>
+
+                                <p id="network-firewall-action">
+                                    No analysis performed.
+                                </p>
+
+                                <small id="network-firewall-reason">
+                                    Firewall result will appear here.
+                                </small>
+
+                            </div>
+
+
+                            <!-- IDS Result -->
+                            <div class="network-result-card">
+
+                                <strong>🔎 Intrusion Detection</strong>
+
+                                <p id="network-ids-status">
+                                    No analysis performed.
+                                </p>
+
+                                <small id="network-ids-alerts">
+                                    IDS alerts will appear here.
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Explanation Cards -->
+                    <div class="network-explanation">
+
+                        <div>
+
+                            <strong>🛡️ Firewall</strong>
+
+                            <p>
+                                Firewall rules determine whether network
+                                traffic should be allowed or blocked.
+                            </p>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>🔎 Intrusion Detection</strong>
+
+                            <p>
+                                IDS detects suspicious patterns such as
+                                excessive connection attempts.
+                            </p>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>⚡ Security Decision</strong>
+
+                            <p>
+                                WatchByte combines both systems to produce
+                                the final security decision.
+                            </p>
+
+                        </div>
+
+                    </div>
+
                 </div>
             </section>
 

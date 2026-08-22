@@ -1689,3 +1689,245 @@ loginClearButton.addEventListener(
 
     }
 );
+
+/* ==========================================
+   FIREWALL & IDS NETWORK ANALYSIS
+   ========================================== */
+
+const networkAnalyzeBtn = document.getElementById("network-analyze");
+const networkClearBtn = document.getElementById("network-clear");
+
+const networkSourceIp = document.getElementById("network-source-ip");
+const networkPort = document.getElementById("network-port");
+const networkProtocol = document.getElementById("network-protocol");
+const networkAttempts = document.getElementById("network-attempts");
+
+const networkMessage = document.getElementById("network-message");
+
+const networkFinalAction = document.getElementById("network-final-action");
+
+const networkFirewallAction =
+    document.getElementById("network-firewall-action");
+
+const networkFirewallReason =
+    document.getElementById("network-firewall-reason");
+
+const networkIdsStatus =
+    document.getElementById("network-ids-status");
+
+const networkIdsAlerts =
+    document.getElementById("network-ids-alerts");
+
+
+/* ==========================================
+   ANALYZE NETWORK TRAFFIC
+========================================== */
+
+if (networkAnalyzeBtn) {
+
+    networkAnalyzeBtn.addEventListener("click", async function () {
+
+        const sourceIp = networkSourceIp.value.trim();
+        const port = networkPort.value.trim();
+        const protocol = networkProtocol.value;
+        const attempts = networkAttempts.value.trim();
+
+
+        /* Validation */
+
+        if (!sourceIp || !port || !protocol || !attempts) {
+
+            networkMessage.textContent =
+                "Please fill in all network fields.";
+
+            networkMessage.className =
+                "network-message error";
+
+            return;
+        }
+
+
+        networkMessage.textContent =
+            "Analyzing network traffic...";
+
+        networkMessage.className =
+            "network-message";
+
+
+        try {
+
+            const response = await fetch(
+                "/api/network/analyze",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        source_ip: sourceIp,
+                        destination_port: Number(port),
+                        protocol: protocol,
+                        connection_attempts: Number(attempts)
+                    })
+                }
+            );
+
+
+            const data = await response.json();
+
+
+            if (!response.ok || !data.success) {
+
+                throw new Error(
+                    data.error || "Network analysis failed."
+                );
+            }
+
+
+            const result = data.result;
+
+
+            /* ==========================================
+               FINAL DECISION
+            ========================================== */
+
+            networkFinalAction.textContent =
+                result.final_action;
+
+            networkFinalAction.className = "";
+
+            if (result.final_action === "ALLOW") {
+
+                networkFinalAction.classList.add("allow");
+
+            } else if (result.final_action === "BLOCK") {
+
+                networkFinalAction.classList.add("block");
+
+            } else if (result.final_action === "ALERT") {
+
+                networkFinalAction.classList.add("alert");
+
+            }
+
+
+            /* ==========================================
+               FIREWALL RESULT
+            ========================================== */
+
+            
+            networkFirewallAction.textContent =
+                result.firewall.action;
+
+            networkFirewallAction.className = "";
+
+            if (result.firewall.action === "ALLOW") {
+
+                networkFirewallAction.classList.add("allow");
+
+            } else {
+
+                networkFirewallAction.classList.add("block");
+
+            }
+
+            networkFirewallReason.textContent =
+                result.firewall.reason;
+
+
+            /* ==========================================
+               IDS RESULT
+            ========================================== */
+
+            if (result.ids.alert) {
+
+                networkIdsStatus.textContent =
+                    "⚠️ Suspicious activity detected.";
+
+                networkIdsStatus.className =
+                    "alert";
+
+                networkIdsAlerts.textContent =
+                    result.ids.alerts.join(" ");
+
+            } else {
+
+                networkIdsStatus.textContent =
+                    "✓ No suspicious activity detected.";
+
+                networkIdsStatus.className =
+                    "allow";
+
+                networkIdsAlerts.textContent =
+                    "No IDS alerts generated.";
+
+            }
+
+
+            networkMessage.textContent =
+                "Network analysis completed successfully.";
+
+            networkMessage.className =
+                "network-message success";
+
+
+        } catch (error) {
+
+            networkMessage.textContent =
+                error.message;
+
+            networkMessage.className =
+                "network-message error";
+
+        }
+
+    });
+
+}
+
+
+/* ==========================================
+   CLEAR NETWORK FORM
+========================================== */
+
+if (networkClearBtn) {
+
+    networkClearBtn.addEventListener("click", function () {
+
+        networkSourceIp.value = "";
+        networkPort.value = "";
+        networkProtocol.value = "tcp";
+        networkAttempts.value = "";
+
+        networkMessage.textContent = "";
+        networkMessage.className = "network-message";
+
+
+        networkFinalAction.textContent =
+            "Awaiting analysis...";
+
+        networkFinalAction.className = "";
+
+
+        networkFirewallAction.textContent =
+            "No analysis performed.";
+
+        networkIdsStatus.className = "";
+
+        networkFirewallAction.className = "";
+
+        networkFirewallReason.textContent =
+            "Firewall result will appear here.";
+
+
+        networkIdsStatus.textContent =
+            "No analysis performed.";
+
+        networkIdsAlerts.textContent =
+            "IDS alerts will appear here.";
+
+    });
+
+}
