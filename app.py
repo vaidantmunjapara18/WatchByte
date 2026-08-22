@@ -23,7 +23,11 @@ from modules.authentication.captcha import (
     generate_captcha,
     verify_captcha
 )
-
+from modules.authentication.rate_limiter import (
+    check_rate_limit,
+    record_failed_attempt,
+    reset_attempts
+)
 
 app = Flask(__name__)
 
@@ -351,6 +355,90 @@ def auth_register():
 
 @app.route("/api/auth/login", methods=["POST"])
 def auth_login():
+    try:
+        data = request.get_json()
+
+        username = data.get("username", "").strip()
+        password = data.get("password", "")
+
+        if not username:
+            return jsonify({
+                "success": False,
+                "error": "Please enter a username."
+            }), 400
+
+        if not password:
+            return jsonify({
+                "success": False,
+                "error": "Please enter a password."
+            }), 400
+
+
+        # ==========================================
+        # RATE LIMIT CHECK
+        # ==========================================
+
+        rate_status = check_rate_limit(username)
+
+        if not rate_status["allowed"]:
+
+            add_log(
+                log_block(
+                    f"Login blocked: too many failed attempts for '{username}'.",
+                    "Rate Limiter"
+                )
+            )
+
+            return jsonify({
+                "success": False,
+                "message": "Too many failed login attempts. Please try again later.",
+                "rate_limited": True
+            }), 429
+
+
+        # ==========================================
+        # AUTHENTICATION
+        # ==========================================
+
+        result = login_user(username, password)
+
+
+        if not result["success"]:
+
+            record_failed_attempt(username)
+
+            add_log(
+                log_warning(
+                    f"Login failed for user '{username}'.",
+                    "Authentication"
+                )
+            )
+
+            return jsonify(result), 401
+
+
+        # ==========================================
+        # SUCCESSFUL LOGIN
+        # ==========================================
+
+        reset_attempts(username)
+
+        add_log(
+            log_info(
+                f"User '{username}' logged in successfully.",
+                "Authentication"
+            )
+        )
+
+        return jsonify(result), 200
+
+
+    except Exception as error:
+
+        return jsonify({
+            "success": False,
+            "error": str(error)
+        }), 400 
     try:
         data = request.get_json()
 
