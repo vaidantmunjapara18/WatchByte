@@ -11,6 +11,19 @@ from modules.integrity.hmac import hmac_sha256
 from modules.integrity.file_hash import calculate_file_sha256
 from modules.authentication.auth import register_user, login_user
 from modules.network.network_engine import analyze_network_request
+from modules.logs.logger import (
+    log_info,
+    log_warning,
+    log_block,
+    add_log,
+    get_logs,
+    clear_logs
+)
+from modules.authentication.captcha import (
+    generate_captcha,
+    verify_captcha
+)
+
 
 app = Flask(__name__)
 
@@ -309,7 +322,23 @@ def auth_register():
         result = register_user(username, password)
 
         if not result["success"]:
+
+            add_log(
+                log_warning(
+                    f"User registration failed for '{username}'.",
+                    "Authentication"
+                )
+            )
+
             return jsonify(result), 400
+
+
+        add_log(
+            log_info(
+                f"User '{username}' registered successfully.",
+                "Authentication"
+            )
+        )
 
         return jsonify(result), 200
 
@@ -343,7 +372,23 @@ def auth_login():
         result = login_user(username, password)
 
         if not result["success"]:
+
+            add_log(
+                log_warning(
+                    f"Login failed for user '{username}'.",
+                    "Authentication"
+                )
+            )
+
             return jsonify(result), 401
+
+
+        add_log(
+            log_info(
+                f"User '{username}' logged in successfully.",
+                "Authentication"
+            )
+        )
 
         return jsonify(result), 200
 
@@ -393,6 +438,41 @@ def analyze_network():
             protocol,
             int(connection_attempts)
         )
+        # ==========================================
+        # SECURITY LOGGING
+        # ==========================================
+
+        # Firewall event
+        if result["firewall"]["action"] == "BLOCK":
+
+            add_log(
+                log_block(
+                    result["firewall"]["reason"],
+                    "Firewall"
+                )
+            )
+
+        else:
+
+            add_log(
+                log_info(
+                    result["firewall"]["reason"],
+                    "Firewall"
+                )
+            )
+
+
+        # IDS event
+        if result["ids"]["alert"]:
+
+            for alert in result["ids"]["alerts"]:
+
+                add_log(
+                    log_warning(
+                        alert,
+                        "IDS"
+                    )
+                )
 
         return jsonify({
             "success": True,
@@ -410,6 +490,162 @@ def analyze_network():
             "success": False,
             "error": str(error)
         }), 400
-    
+
+# ==========================================
+# SECURITY LOG API
+# ==========================================
+
+@app.route("/api/logs", methods=["GET"])
+def get_security_logs():
+
+    return jsonify({
+        "success": True,
+        "logs": get_logs()
+    })
+
+
+@app.route("/api/logs", methods=["POST"])
+def create_security_log():
+
+    try:
+
+        data = request.get_json()
+
+        level = data.get("level", "").strip().upper()
+        event = data.get("event", "").strip()
+        source = data.get("source", "WatchByte").strip()
+
+        if not level:
+            return jsonify({
+                "success": False,
+                "error": "Log level is required."
+            }), 400
+
+        if not event:
+            return jsonify({
+                "success": False,
+                "error": "Log event is required."
+            }), 400
+
+        if level == "INFO":
+
+            log = log_info(event, source)
+
+        elif level == "WARNING":
+
+            log = log_warning(event, source)
+
+        elif level == "BLOCK":
+
+            log = log_block(event, source)
+
+        else:
+
+            return jsonify({
+                "success": False,
+                "error": "Invalid log level."
+            }), 400
+
+        add_log(log)
+
+        return jsonify({
+            "success": True,
+            "log": log
+        }), 201
+
+    except Exception as error:
+
+        return jsonify({
+            "success": False,
+            "error": str(error)
+        }), 400
+
+
+@app.route("/api/logs/clear", methods=["POST"])
+def clear_security_logs():
+
+    clear_logs()
+
+    return jsonify({
+        "success": True,
+        "message": "Security logs cleared successfully."
+    })
+
+# ==========================================
+# CAPTCHA API
+# ==========================================
+
+@app.route("/api/captcha/generate", methods=["GET"])
+def generate_captcha_api():
+
+    captcha = generate_captcha()
+
+    return jsonify({
+        "success": True,
+        "captcha": captcha
+    })
+
+
+@app.route("/api/captcha/verify", methods=["POST"])
+def verify_captcha_api():
+
+    try:
+
+        data = request.get_json()
+
+        expected = data.get("expected", "")
+        submitted = data.get("submitted", "")
+
+        if not expected:
+            return jsonify({
+                "success": False,
+                "error": "CAPTCHA challenge is required."
+            }), 400
+
+        if not submitted:
+            return jsonify({
+                "success": False,
+                "error": "CAPTCHA answer is required."
+            }), 400
+
+        verified = verify_captcha(
+            expected,
+            submitted
+        )
+
+        # ==========================================
+        # CAPTCHA SECURITY LOGGING
+        # ==========================================
+
+        if verified:
+
+            add_log(
+                log_info(
+                    "CAPTCHA verification successful.",
+                    "CAPTCHA"
+                )
+            )
+
+        else:
+
+            add_log(
+                log_warning(
+                    "CAPTCHA verification failed.",
+                    "CAPTCHA"
+                )
+            )
+
+        return jsonify({
+            "success": True,
+            "verified": verified
+        })
+
+    except Exception as error:
+
+        return jsonify({
+            "success": False,
+            "error": str(error)
+        }), 400
+
 if __name__ == "__main__":
     app.run(debug=True)

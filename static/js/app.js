@@ -1571,6 +1571,15 @@ async function loginUser() {
     }
 
 
+    openCaptchaModal();
+}
+
+async function performLogin() {
+
+    const username = loginUsername.value.trim();
+    const password = loginPassword.value;
+
+
     try {
 
         const response = await fetch(
@@ -1611,7 +1620,6 @@ async function loginUser() {
 
 
         loginPassword.value = "";
-
 
     } catch (error) {
 
@@ -1929,5 +1937,486 @@ if (networkClearBtn) {
             "IDS alerts will appear here.";
 
     });
+
+}
+
+/* ==========================================
+   SECURITY LOGS
+   ========================================== */
+
+const logsList = document.getElementById("logs-list");
+const logsMessage = document.getElementById("logs-message");
+const logsRefresh = document.getElementById("logs-refresh");
+const logsClear = document.getElementById("logs-clear");
+
+
+function showLogsMessage(message, type) {
+
+    logsMessage.textContent = message;
+    logsMessage.className = `logs-message ${type}`;
+
+}
+
+
+function renderLogs(logs) {
+
+    logsList.innerHTML = "";
+
+    if (!logs || logs.length === 0) {
+
+        logsList.innerHTML = `
+            <div class="logs-empty">
+
+                <strong>No security events</strong>
+
+                <p>
+                    Security events will appear here.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    logs.forEach(function(log) {
+
+        const logEntry = document.createElement("div");
+
+        logEntry.className = "log-entry";
+
+
+        const level = String(log.level || "").toLowerCase();
+
+
+        logEntry.innerHTML = `
+
+            <span class="log-timestamp">
+                ${log.timestamp}
+            </span>
+
+            <span class="log-level ${level}">
+                ${log.level}
+            </span>
+
+            <span class="log-event">
+                ${log.event}
+            </span>
+
+            <span class="log-source">
+                ${log.source}
+            </span>
+
+        `;
+
+
+        logsList.appendChild(logEntry);
+
+    });
+
+}
+
+
+async function loadSecurityLogs() {
+
+    try {
+
+        const response = await fetch("/api/logs");
+
+        const data = await response.json();
+
+
+        if (!response.ok || !data.success) {
+
+            throw new Error(
+                data.error || "Unable to load security logs."
+            );
+
+        }
+
+
+        renderLogs(data.logs);
+
+        showLogsMessage(
+            `${data.logs.length} security event(s) loaded.`,
+            "success"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error("Security Logs Error:", error);
+
+        showLogsMessage(
+            "Unable to load security logs.",
+            "error"
+        );
+
+    }
+
+}
+
+
+async function clearSecurityLogs() {
+
+    try {
+
+        const response = await fetch(
+            "/api/logs/clear",
+            {
+                method: "POST"
+            }
+        );
+
+
+        const data = await response.json();
+
+
+        if (!response.ok || !data.success) {
+
+            throw new Error(
+                data.error || "Unable to clear security logs."
+            );
+
+        }
+
+
+        renderLogs([]);
+
+        showLogsMessage(
+            "Security logs cleared successfully.",
+            "success"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error("Security Logs Error:", error);
+
+        showLogsMessage(
+            "Unable to clear security logs.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* Refresh button */
+
+if (logsRefresh) {
+
+    logsRefresh.addEventListener(
+        "click",
+        loadSecurityLogs
+    );
+
+}
+
+
+/* Clear button */
+
+if (logsClear) {
+
+    logsClear.addEventListener(
+        "click",
+        clearSecurityLogs
+    );
+
+}
+
+/* ==========================================
+   CAPTCHA VERIFICATION
+========================================== */
+
+const captchaModal =
+    document.getElementById("captcha-modal");
+
+const captchaText =
+    document.getElementById("captcha-text");
+
+const captchaInput =
+    document.getElementById("captcha-input");
+
+const captchaMessage =
+    document.getElementById("captcha-message");
+
+const captchaRefresh =
+    document.getElementById("captcha-refresh");
+
+const captchaVerify =
+    document.getElementById("captcha-verify");
+
+const captchaClose =
+    document.getElementById("captcha-close");
+
+const captchaCancel =
+    document.getElementById("captcha-cancel");
+
+
+let currentCaptcha = "";
+
+
+/* ==========================================
+   OPEN CAPTCHA
+========================================== */
+
+async function openCaptchaModal() {
+
+    captchaModal.style.display = "flex";
+
+    captchaInput.value = "";
+
+    captchaMessage.textContent = "";
+
+    captchaMessage.className =
+        "captcha-message";
+
+    await generateCaptchaForLogin();
+
+    captchaInput.focus();
+
+}
+
+
+/* ==========================================
+   CLOSE CAPTCHA
+========================================== */
+
+function closeCaptchaModal() {
+
+    captchaModal.style.display = "none";
+
+    captchaInput.value = "";
+
+    captchaMessage.textContent = "";
+
+    captchaMessage.className =
+        "captcha-message";
+
+}
+
+
+/* ==========================================
+   GENERATE CAPTCHA
+========================================== */
+
+async function generateCaptchaForLogin() {
+
+    captchaText.textContent = "Loading...";
+
+    try {
+
+        const response = await fetch(
+            "/api/captcha/generate"
+        );
+
+
+        const data = await response.json();
+
+
+        if (!response.ok || !data.success) {
+
+            throw new Error(
+                data.error ||
+                "Unable to generate CAPTCHA."
+            );
+
+        }
+
+
+        currentCaptcha = data.captcha;
+
+        captchaText.textContent =
+            currentCaptcha;
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        captchaText.textContent =
+            "ERROR";
+
+        captchaMessage.textContent =
+            "Unable to generate CAPTCHA.";
+
+        captchaMessage.className =
+            "captcha-message error";
+
+    }
+
+}
+
+
+/* ==========================================
+   VERIFY CAPTCHA
+========================================== */
+
+async function verifyCaptchaForLogin() {
+
+    const submittedCaptcha =
+        captchaInput.value.trim();
+
+
+    captchaMessage.textContent = "";
+
+    captchaMessage.className =
+        "captcha-message";
+
+
+    if (!submittedCaptcha) {
+
+        captchaMessage.textContent =
+            "Please enter the CAPTCHA.";
+
+        captchaMessage.className =
+            "captcha-message error";
+
+        return;
+
+    }
+
+
+    captchaVerify.disabled = true;
+
+    captchaVerify.textContent =
+        "Verifying...";
+
+
+    try {
+
+        const response = await fetch(
+            "/api/captcha/verify",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    expected: currentCaptcha,
+                    submitted: submittedCaptcha
+                })
+            }
+        );
+
+
+        const data = await response.json();
+
+
+        if (!response.ok || !data.success) {
+
+            throw new Error(
+                data.error ||
+                "CAPTCHA verification failed."
+            );
+
+        }
+
+
+        if (!data.verified) {
+
+            captchaMessage.textContent =
+                "Incorrect CAPTCHA. Please try again.";
+
+            captchaMessage.className =
+                "captcha-message error";
+
+            captchaInput.value = "";
+
+            await generateCaptchaForLogin();
+
+            captchaInput.focus();
+
+            return;
+
+        }
+
+
+        captchaMessage.textContent =
+            "CAPTCHA verified successfully.";
+
+        captchaMessage.className =
+            "captcha-message success";
+
+
+        /*
+         * CAPTCHA passed.
+         * Now continue with login.
+         */
+
+        closeCaptchaModal();
+
+        await performLogin();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        captchaMessage.textContent =
+            "Unable to verify CAPTCHA.";
+
+        captchaMessage.className =
+            "captcha-message error";
+
+    } finally {
+
+        captchaVerify.disabled = false;
+
+        captchaVerify.textContent =
+            "Verify CAPTCHA";
+
+    }
+
+}
+
+
+/* ==========================================
+   CAPTCHA BUTTONS
+========================================== */
+
+if (captchaRefresh) {
+
+    captchaRefresh.addEventListener(
+        "click",
+        generateCaptchaForLogin
+    );
+
+}
+
+
+if (captchaVerify) {
+
+    captchaVerify.addEventListener(
+        "click",
+        verifyCaptchaForLogin
+    );
+
+}
+
+
+if (captchaClose) {
+
+    captchaClose.addEventListener(
+        "click",
+        closeCaptchaModal
+    );
+
+}
+
+
+if (captchaCancel) {
+
+    captchaCancel.addEventListener(
+        "click",
+        closeCaptchaModal
+    );
 
 }
