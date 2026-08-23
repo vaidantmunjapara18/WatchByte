@@ -7,6 +7,10 @@ from modules.security.input_validation import (
     validate_text,
     validate_integer
 )
+from modules.security.request_limits import (
+    is_request_size_allowed,
+    get_max_request_size
+)
 from flask import Flask, render_template, request, jsonify
 from modules.cryptography.aes import encrypt_aes, decrypt_aes
 from modules.cryptography.des import encrypt_des, decrypt_des
@@ -51,6 +55,15 @@ from modules.authentication.session_manager import (
 )
 
 app = Flask(__name__)
+
+app.config["MAX_CONTENT_LENGTH"] = get_max_request_size()
+
+@app.errorhandler(413)
+def handle_request_too_large(error):
+    return jsonify({
+        "success": False,
+        "error": "Request is too large. Maximum allowed size is 1 MB."
+    }), 413
 
 @app.after_request
 def add_security_headers(response):
@@ -115,6 +128,12 @@ def aes_operation():
         })
 
     except Exception as error:
+        if getattr(error, "code", None) == 413:
+            return jsonify({
+                "success": False,
+                "error": "Request is too large. Maximum allowed size is 1 MB."
+            }), 413
+
         return jsonify({
             "success": False,
             "error": str(error)
@@ -705,6 +724,12 @@ def analyze_network():
         }), 400
 
     except Exception as error:
+        if getattr(error, "code", None) == 413:
+            return jsonify({
+                "success": False,
+                "error": "Request is too large. Maximum allowed size is 1 MB."
+            }), 413
+
         return jsonify({
             "success": False,
             "error": str(error)
