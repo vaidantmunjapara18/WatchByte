@@ -28,6 +28,12 @@ from modules.authentication.rate_limiter import (
     record_failed_attempt,
     reset_attempts
 )
+from modules.authentication.account_lockout import (
+    is_locked,
+    record_failed_login,
+    reset_failed_logins,
+    get_lockout_status
+)
 from modules.authentication.session_manager import (
     create_session,
     validate_session,
@@ -379,6 +385,27 @@ def auth_login():
                 "error": "Please enter a password."
             }), 400
 
+        # ==========================================
+        # ACCOUNT LOCKOUT CHECK
+        # ==========================================
+
+        if is_locked(username):
+
+            lockout_status = get_lockout_status(username)
+
+            add_log(
+                log_block(
+                    f"Login blocked: account '{username}' is locked.",
+                    "Account Lockout"
+                )
+            )
+
+            return jsonify({
+                "success": False,
+                "message": "Account is temporarily locked. Please try again later.",
+                "account_locked": True,
+                "remaining_seconds": lockout_status["remaining_seconds"]
+            }), 423
 
         # ==========================================
         # RATE LIMIT CHECK
@@ -411,7 +438,28 @@ def auth_login():
 
         if not result["success"]:
 
+            # Record failure for the existing rate limiter
             record_failed_attempt(username)
+
+            # Record failure for account lockout
+            lockout_result = record_failed_login(username)
+
+            if lockout_result["locked"]:
+
+                add_log(
+                    log_block(
+                        f"Account '{username}' locked after repeated failed logins.",
+                        "Account Lockout"
+                    )
+                )
+
+                return jsonify({
+                    "success": False,
+                    "message": "Account is temporarily locked. Please try again later.",
+                    "account_locked": True,
+                    "remaining_seconds": get_lockout_status(username)["remaining_seconds"]
+                }), 423
+
 
             add_log(
                 log_warning(
@@ -427,7 +475,11 @@ def auth_login():
         # SUCCESSFUL LOGIN
         # ==========================================
 
+        # Reset rate limiter
         reset_attempts(username)
+
+        # Reset account lockout
+        reset_failed_logins(username)
 
         # Create secure session
         session_token = create_session(username)
