@@ -11,6 +11,7 @@ from modules.security.request_limits import (
     is_request_size_allowed,
     get_max_request_size
 )
+from modules.security.error_handler import get_safe_error_message
 from flask import Flask, render_template, request, jsonify
 from modules.cryptography.aes import encrypt_aes, decrypt_aes
 from modules.cryptography.des import encrypt_des, decrypt_des
@@ -136,8 +137,8 @@ def aes_operation():
 
         return jsonify({
             "success": False,
-            "error": str(error)
-        }), 400
+            "error": get_safe_error_message(error)
+        }), 500
 
 @app.route("/api/des", methods=["POST"])
 def des_operation():
