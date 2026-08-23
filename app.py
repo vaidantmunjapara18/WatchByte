@@ -28,6 +28,12 @@ from modules.authentication.rate_limiter import (
     record_failed_attempt,
     reset_attempts
 )
+from modules.authentication.session_manager import (
+    create_session,
+    validate_session,
+    destroy_session,
+    get_active_sessions
+)
 
 app = Flask(__name__)
 
@@ -423,6 +429,16 @@ def auth_login():
 
         reset_attempts(username)
 
+        # Create secure session
+        session_token = create_session(username)
+
+        add_log(
+            log_info(
+                f"Session created for user '{username}'.",
+                "Session Manager"
+            )
+        ) 
+
         add_log(
             log_info(
                 f"User '{username}' logged in successfully.",
@@ -430,7 +446,11 @@ def auth_login():
             )
         )
 
-        return jsonify(result), 200
+        return jsonify({
+            "success": True,
+            "message": "Login successful.",
+            "session_token": session_token
+        }), 200
 
 
     except Exception as error:
@@ -734,6 +754,118 @@ def verify_captcha_api():
             "success": False,
             "error": str(error)
         }), 400
+
+# ==========================================
+# SESSION MANAGEMENT API
+# ==========================================
+
+@app.route("/api/auth/session", methods=["POST"])
+def validate_auth_session():
+
+    try:
+
+        data = request.get_json()
+
+        session_token = data.get("session_token", "")
+
+        if not session_token:
+            return jsonify({
+                "success": False,
+                "error": "Session token is required."
+            }), 400
+
+
+        session = validate_session(session_token)
+
+
+        if not session["valid"]:
+
+            add_log(
+                log_warning(
+                    "Invalid or expired session attempted.",
+                    "Session Manager"
+                )
+            )
+
+            return jsonify({
+                "success": False,
+                "valid": False,
+                "error": "Session is invalid or expired."
+            }), 401
+
+
+        return jsonify({
+            "success": True,
+            "valid": True,
+            "username": session["username"]
+        }), 200
+
+
+    except Exception as error:
+
+        return jsonify({
+            "success": False,
+            "error": str(error)
+        }), 400
+
+@app.route("/api/auth/logout", methods=["POST"])
+def auth_logout():
+
+    try:
+
+        data = request.get_json()
+
+        session_token = data.get("session_token", "")
+
+        if not session_token:
+            return jsonify({
+                "success": False,
+                "error": "Session token is required."
+            }), 400
+
+
+        destroyed = destroy_session(session_token)
+
+
+        if not destroyed:
+            return jsonify({
+                "success": False,
+                "message": "Session not found or already logged out."
+            }), 404
+
+
+        add_log(
+            log_info(
+                "User session terminated.",
+                "Session Manager"
+            )
+        )
+
+
+        return jsonify({
+            "success": True,
+            "message": "Logout successful."
+        }), 200
+
+
+    except Exception as error:
+
+        return jsonify({
+            "success": False,
+            "error": str(error)
+        }), 400
+
+@app.route("/api/auth/sessions", methods=["GET"])
+def active_sessions():
+
+    return jsonify({
+        "success": True,
+        "active_sessions": get_active_sessions()
+    }), 200
+
+@app.route("/dashboard")
+def dashboard():
+    return render_template("dashboard.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

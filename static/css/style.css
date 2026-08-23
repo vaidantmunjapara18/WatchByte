@@ -2838,3 +2838,63 @@ button {
     }
 
 }
+
+/* ==========================================
+   SESSION STATUS
+========================================== */
+
+.session-status {
+    margin-top: 24px;
+    padding: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.session-status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.session-status-header h3 {
+    margin: 6px 0;
+}
+
+.session-status-header p {
+    margin: 0;
+}
+
+.session-indicator {
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.session-indicator.inactive {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.session-indicator.active {
+    background: rgba(0, 200, 120, 0.15);
+}
+
+.session-user {
+    margin-top: 20px;
+    padding: 14px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    font-weight: 600;
+}
+
+#session-logout {
+    margin-top: 16px;
+}
+
+#session-logout:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

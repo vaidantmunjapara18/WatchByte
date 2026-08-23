@@ -1613,11 +1613,16 @@ async function performLogin() {
         }
 
 
+        // Store the session token returned by the server
+        currentSessionToken = data.session_token;
+
+        // Update the session UI
+        checkCurrentSession();
+
         showLoginMessage(
             "Login successful.",
             "success"
         );
-
 
         loginPassword.value = "";
 
@@ -2420,3 +2425,145 @@ if (captchaCancel) {
     );
 
 }
+
+// ==========================================
+// SESSION MANAGEMENT
+// ==========================================
+
+let currentSessionToken = null;
+
+
+const sessionIndicator = document.getElementById("session-indicator");
+const sessionStatusMessage = document.getElementById("session-status-message");
+const sessionUser = document.getElementById("session-user");
+const sessionLogout = document.getElementById("session-logout");
+
+
+function updateSessionUI(active, username = "") {
+
+    if (active) {
+
+        sessionIndicator.textContent = "ACTIVE";
+        sessionIndicator.classList.remove("inactive");
+        sessionIndicator.classList.add("active");
+
+        sessionStatusMessage.textContent =
+            "Your WatchByte session is active.";
+
+        sessionUser.textContent =
+            "User: " + username;
+
+        sessionLogout.disabled = false;
+
+    } else {
+
+        sessionIndicator.textContent = "INACTIVE";
+        sessionIndicator.classList.remove("active");
+        sessionIndicator.classList.add("inactive");
+
+        sessionStatusMessage.textContent =
+            "No active session.";
+
+        sessionUser.textContent =
+            "Not logged in";
+
+        sessionLogout.disabled = true;
+    }
+}
+
+
+// ==========================================
+// CHECK CURRENT SESSION
+// ==========================================
+
+async function checkCurrentSession() {
+
+    if (!currentSessionToken) {
+        updateSessionUI(false);
+        return;
+    }
+
+    try {
+
+        const response = await fetch("/api/auth/session", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                session_token: currentSessionToken
+            })
+        });
+
+        const data = await response.json();
+
+
+        if (data.success && data.valid) {
+
+            updateSessionUI(true, data.username);
+
+        } else {
+
+            currentSessionToken = null;
+            updateSessionUI(false);
+        }
+
+    } catch (error) {
+
+        console.error("Session check failed:", error);
+        updateSessionUI(false);
+    }
+}
+
+
+// ==========================================
+// LOGOUT
+// ==========================================
+
+sessionLogout.addEventListener("click", async function() {
+
+    if (!currentSessionToken) {
+        return;
+    }
+
+
+    try {
+
+        const response = await fetch("/api/auth/logout", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                session_token: currentSessionToken
+            })
+        });
+
+
+        const data = await response.json();
+
+
+        if (data.success) { 
+
+            currentSessionToken = null;
+
+            updateSessionUI(false);
+
+            console.log("Logout successful.");
+
+        } else {
+
+            console.error(data.message || "Logout failed.");
+        }
+
+
+    } catch (error) {
+
+        console.error("Logout error:", error);
+    }
+
+});
+
+
+// Initial session state
+updateSessionUI(false);

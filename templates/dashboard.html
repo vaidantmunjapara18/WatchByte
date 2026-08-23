@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WatchByte - Security Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <h1>WatchByte</h1>
+
+        <div>
+            <span>Security Dashboard</span>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </nav>
+
+    <main class="dashboard">
+
+        <h2>Security Dashboard</h2>
+        <p>Monitor authentication and security activity.</p>
+
+        <section class="stats">
+
+            <div class="stat-card">
+                <h3>Total Events</h3>
+                <p id="total-events">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Successful Logins</h3>
+                <p id="successful-logins">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Failed Logins</h3>
+                <p id="failed-logins">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Security Alerts</h3>
+                <p id="security-alerts">0</p>
+            </div>
+
+        </section>
+
+        <section class="recent-events">
+
+            <h2>Recent Security Events</h2>
+
+            <div id="events-container">
+                <p>No security events available.</p>
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+</html>
