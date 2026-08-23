@@ -1,4 +1,8 @@
 from modules.security.security_headers import apply_security_headers
+from modules.security.csrf import (
+    generate_csrf_token,
+    verify_csrf_token
+)
 from flask import Flask, render_template, request, jsonify
 from modules.cryptography.aes import encrypt_aes, decrypt_aes
 from modules.cryptography.des import encrypt_des, decrypt_des
@@ -810,6 +814,19 @@ def verify_captcha_api():
             "success": False,
             "error": str(error)
         }), 400
+# ==========================================
+# CSRF PROTECTION API
+# ==========================================
+
+@app.route("/api/security/csrf", methods=["GET"])
+def get_csrf_token():
+
+    token = generate_csrf_token()
+
+    return jsonify({
+        "success": True,
+        "csrf_token": token
+    }), 200
 
 # ==========================================
 # SESSION MANAGEMENT API
@@ -872,6 +889,28 @@ def auth_logout():
         data = request.get_json()
 
         session_token = data.get("session_token", "")
+
+        csrf_token = data.get("csrf_token", "")
+
+        # ==========================================
+        # CSRF VALIDATION
+        # ==========================================
+
+        expected_csrf_token = request.headers.get("X-CSRF-Token")
+
+        if not verify_csrf_token(expected_csrf_token, csrf_token):
+
+            add_log(
+                log_warning(
+                    "CSRF validation failed during logout.",
+                    "CSRF Protection"
+                )
+            )
+
+            return jsonify({
+                "success": False,
+                "error": "Invalid or missing CSRF token."
+            }), 403
 
         if not session_token:
             return jsonify({
