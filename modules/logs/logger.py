@@ -5,7 +5,12 @@
 from datetime import datetime
 
 
-def create_log(level, event, source="WatchByte"):
+def create_log(
+    level,
+    event,
+    source="WatchByte",
+    ip_address=None
+):
     """
     Create a structured security log entry.
     """
@@ -14,20 +19,48 @@ def create_log(level, event, source="WatchByte"):
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "level": level.upper(),
         "event": event,
-        "source": source
+        "source": source,
+        "ip_address": ip_address
     }
 
 
-def log_info(event, source="WatchByte"):
-    return create_log("INFO", event, source)
+def log_info(
+    event,
+    source="WatchByte",
+    ip_address=None
+):
+    return create_log(
+        "INFO",
+        event,
+        source,
+        ip_address
+    )
 
 
-def log_warning(event, source="WatchByte"):
-    return create_log("WARNING", event, source)
+def log_warning(
+    event,
+    source="WatchByte",
+    ip_address=None
+):
+    return create_log(
+        "WARNING",
+        event,
+        source,
+        ip_address
+    )
 
 
-def log_block(event, source="WatchByte"):
-    return create_log("BLOCK", event, source)
+def log_block(
+    event,
+    source="WatchByte",
+    ip_address=None
+):
+    return create_log(
+        "BLOCK",
+        event,
+        source,
+        ip_address
+    )
 
 # ==========================================
 # SECURITY LOG STORAGE

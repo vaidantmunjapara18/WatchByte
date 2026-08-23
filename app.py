@@ -51,6 +51,15 @@ app = Flask(__name__)
 @app.after_request
 def add_security_headers(response):
     return apply_security_headers(response)
+def get_client_ip():
+    """
+    Get the client's IP address from the current Flask request.
+    """
+
+    return request.headers.get(
+        "X-Forwarded-For",
+        request.remote_addr
+    )
 
 @app.route("/")
 def home():
@@ -350,7 +359,8 @@ def auth_register():
             add_log(
                 log_warning(
                     f"User registration failed for '{username}'.",
-                    "Authentication"
+                    "Authentication",
+                    get_client_ip()
                 )
             )
 
@@ -360,7 +370,8 @@ def auth_register():
         add_log(
             log_info(
                 f"User '{username}' registered successfully.",
-                "Authentication"
+                "Authentication",
+                get_client_ip()
             )
         )
 
@@ -404,7 +415,8 @@ def auth_login():
             add_log(
                 log_block(
                     f"Login blocked: account '{username}' is locked.",
-                    "Account Lockout"
+                    "Account Lockout",
+                    get_client_ip()
                 )
             )
 
@@ -426,10 +438,10 @@ def auth_login():
             add_log(
                 log_block(
                     f"Login blocked: too many failed attempts for '{username}'.",
-                    "Rate Limiter"
+                    "Rate Limiter",
+                    get_client_ip()
                 )
             )
-
             return jsonify({
                 "success": False,
                 "message": "Too many failed login attempts. Please try again later.",
@@ -457,7 +469,8 @@ def auth_login():
                 add_log(
                     log_block(
                         f"Account '{username}' locked after repeated failed logins.",
-                        "Account Lockout"
+                        "Account Lockout",
+                        get_client_ip()
                     )
                 )
 
@@ -472,7 +485,8 @@ def auth_login():
             add_log(
                 log_warning(
                     f"Login failed for user '{username}'.",
-                    "Authentication"
+                    "Authentication",
+                    get_client_ip()
                 )
             )
 
@@ -495,14 +509,16 @@ def auth_login():
         add_log(
             log_info(
                 f"Session created for user '{username}'.",
-                "Session Manager"
+                "Session Manager",
+                get_client_ip()
             )
-        ) 
+        )
 
         add_log(
             log_info(
                 f"User '{username}' logged in successfully.",
-                "Authentication"
+                "Authentication",
+                get_client_ip()
             )
         )
 
@@ -790,7 +806,8 @@ def verify_captcha_api():
             add_log(
                 log_info(
                     "CAPTCHA verification successful.",
-                    "CAPTCHA"
+                    "CAPTCHA",
+                    get_client_ip()
                 )
             )
 
@@ -799,7 +816,8 @@ def verify_captcha_api():
             add_log(
                 log_warning(
                     "CAPTCHA verification failed.",
-                    "CAPTCHA"
+                    "CAPTCHA",
+                    get_client_ip()
                 )
             )
 
@@ -932,7 +950,8 @@ def auth_logout():
         add_log(
             log_info(
                 "User session terminated.",
-                "Session Manager"
+                "Session Manager",
+                get_client_ip()
             )
         )
 
