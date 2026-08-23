@@ -1,3 +1,4 @@
+from modules.security.security_headers import apply_security_headers
 from flask import Flask, render_template, request, jsonify
 from modules.cryptography.aes import encrypt_aes, decrypt_aes
 from modules.cryptography.des import encrypt_des, decrypt_des
@@ -43,6 +44,9 @@ from modules.authentication.session_manager import (
 
 app = Flask(__name__)
 
+@app.after_request
+def add_security_headers(response):
+    return apply_security_headers(response)
 
 @app.route("/")
 def home():
