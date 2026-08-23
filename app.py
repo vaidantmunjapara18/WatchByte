@@ -3,6 +3,10 @@ from modules.security.csrf import (
     generate_csrf_token,
     verify_csrf_token
 )
+from modules.security.input_validation import (
+    validate_text,
+    validate_integer
+)
 from flask import Flask, render_template, request, jsonify
 from modules.cryptography.aes import encrypt_aes, decrypt_aes
 from modules.cryptography.des import encrypt_des, decrypt_des
@@ -591,6 +595,37 @@ def analyze_network():
         destination_port = data.get("destination_port")
         protocol = data.get("protocol", "").strip()
         connection_attempts = data.get("connection_attempts")
+
+        # ==========================================
+        # INPUT VALIDATION
+        # ==========================================
+
+        if not validate_text(source_ip, 1, 45):
+            return jsonify({
+                "success": False,
+                "error": "Invalid source IP address."
+            }), 400
+
+
+        if not validate_integer(destination_port, 1, 65535):
+            return jsonify({
+                "success": False,
+                "error": "Destination port must be between 1 and 65535."
+            }), 400
+
+
+        if not validate_text(protocol, 1, 20):
+            return jsonify({
+                "success": False,
+                "error": "Invalid protocol."
+            }), 400
+
+
+        if not validate_integer(connection_attempts, 0, 1000000):
+            return jsonify({
+                "success": False,
+                "error": "Connection attempts must be a valid number."
+            }), 400
 
         if not source_ip:
             return jsonify({
