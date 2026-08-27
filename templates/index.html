@@ -274,7 +274,7 @@
                         🔑 RSA
                     </button>
 
-                    <button class="crypto-tab">
+                    <button class="crypto-tab" id="dh-tab">
                         ⇄ Diffie-Hellman
                     </button>
 
@@ -782,6 +782,169 @@
                 </div>
             </section>
 
+
+           <!-- ==========================================
+                DIFFIE-HELLMAN WORKSPACE
+            ========================================== -->
+
+            <div
+                class="crypto-workspace"
+                id="dh-workspace"
+                style="display: none;"
+            >
+
+                <div class="crypto-header">
+
+                    <div>
+                        <p class="eyebrow">DIFFIE-HELLMAN</p>
+
+                        <h3>Diffie-Hellman Key Exchange</h3>
+
+                        <p class="rsa-info">
+                            Secure key agreement between two parties.
+                        </p>
+                    </div>
+
+                    <span class="algorithm-badge">
+                        DH-2048
+                    </span>
+
+                </div>
+
+
+                <!-- DH Information -->
+
+                <div class="crypto-info">
+
+                    <div>
+                        <strong>Key size</strong>
+                        <span>2048 bit</span>
+                    </div>
+
+                    <div>
+                        <strong>Generator</strong>
+                        <span>2</span>
+                    </div>
+
+                    <div>
+                        <strong>Purpose</strong>
+                        <span>Key Exchange</span>
+                    </div>
+
+                </div>
+
+
+                <!-- Key Exchange -->
+
+                <div class="rsa-key-section">
+
+                    <div class="rsa-section-header">
+
+                        <div>
+                            <strong>Key Exchange Simulation</strong>
+
+                            <p>
+                                Generate independent keys for Alice and Bob
+                                and verify that both derive the same shared secret.
+                            </p>
+                        </div>
+
+                        <button
+                            id="dh-generate"
+                            class="primary-action"
+                        >
+                            ⇄ Generate Shared Secret
+                        </button>
+
+                    </div>
+
+
+                    <!-- Alice / Bob -->
+
+                    <div class="rsa-key-grid">
+
+                        <div class="input-group">
+
+                            <label for="dh-alice-public">
+                                Alice Public Key
+                            </label>
+
+                            <textarea
+                                id="dh-alice-public"
+                                rows="8"
+                                readonly
+                                placeholder="Alice's public key will appear here..."
+                            ></textarea>
+
+                        </div>
+
+
+                        <div class="input-group">
+
+                            <label for="dh-bob-public">
+                                Bob Public Key
+                            </label>
+
+                            <textarea
+                                id="dh-bob-public"
+                                rows="8"
+                                readonly
+                                placeholder="Bob's public key will appear here..."
+                            ></textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DH Result -->
+
+                <div class="crypto-form">
+
+                    <div class="input-group">
+
+                        <label>
+                            Shared Secret Verification
+                        </label>
+
+                        <div
+                            id="dh-result"
+                            class="crypto-result"
+                        >
+                            Generate keys to perform the exchange.
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DH Message -->
+
+                <div
+                    id="dh-message"
+                    class="crypto-message"
+                ></div>
+
+
+                <!-- Explanation -->
+
+                <div class="rsa-explanation">
+
+                    <strong>How Diffie-Hellman works</strong>
+
+                    <p>
+                        Alice and Bob generate private keys and derive
+                        corresponding public keys. Each party combines
+                        their private key with the other party's public key
+                        to independently derive the same shared secret.
+                    </p>
+
+                </div>
+
+            </div>
 
            <section id="integrity" class="content-section">
 

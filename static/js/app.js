@@ -492,18 +492,28 @@ cryptoTabs.forEach((tab) => {
             aesWorkspace.style.display = "none";
             desWorkspace.style.display = "block";
             rsaWorkspace.style.display = "none";
+            dhWorkspace.style.display = "none";
 
         } else if (tab.id === "rsa-tab") {
 
             aesWorkspace.style.display = "none";
             desWorkspace.style.display = "none";
             rsaWorkspace.style.display = "block";
+            dhWorkspace.style.display = "none";
+
+        } else if (tab.id === "dh-tab") {
+
+            aesWorkspace.style.display = "none";
+            desWorkspace.style.display = "none";
+            rsaWorkspace.style.display = "none";
+            dhWorkspace.style.display = "block";
 
         } else {
 
             aesWorkspace.style.display = "block";
             desWorkspace.style.display = "none";
             rsaWorkspace.style.display = "none";
+            dhWorkspace.style.display = "none";
 
         }
 
@@ -517,6 +527,9 @@ cryptoTabs.forEach((tab) => {
 
 const rsaTab = document.getElementById("rsa-tab");
 const rsaWorkspace = document.getElementById("rsa-workspace");
+
+const dhWorkspace =
+    document.getElementById("dh-workspace");
 
 const rsaGenerateButton = document.getElementById("rsa-generate");
 
@@ -848,6 +861,142 @@ rsaClearButton.addEventListener(
 
     }
 );
+
+// ==========================================
+// DIFFIE-HELLMAN CRYPTOGRAPHY
+// ==========================================
+
+const dhTab =
+    document.getElementById("dh-tab");
+
+const dhGenerateButton =
+    document.getElementById("dh-generate");
+
+const dhAlicePublic =
+    document.getElementById("dh-alice-public");
+
+const dhBobPublic =
+    document.getElementById("dh-bob-public");
+
+const dhResult =
+    document.getElementById("dh-result");
+
+const dhMessage =
+    document.getElementById("dh-message");
+
+
+// ==========================================
+// GENERATE SHARED SECRET
+// ==========================================
+
+if (dhGenerateButton) {
+
+    dhGenerateButton.addEventListener(
+        "click",
+        async () => {
+
+            dhGenerateButton.disabled = true;
+
+            dhMessage.textContent =
+                "Generating Diffie-Hellman key exchange...";
+
+            dhMessage.className =
+                "crypto-message success";
+
+            dhResult.textContent =
+                "Performing key exchange...";
+
+            try {
+
+                const response = await fetch(
+                    "/api/diffie-hellman/generate",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+                        body: JSON.stringify({})
+                    }
+                );
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    !response.ok ||
+                    !data.success
+                ) {
+
+                    throw new Error(
+                        data.error ||
+                        "Diffie-Hellman exchange failed."
+                    );
+
+                }
+
+
+                dhAlicePublic.value =
+                    "Generated successfully.";
+
+                dhBobPublic.value =
+                    "Generated successfully.";
+
+
+                if (data.shared_secret_match) {
+
+                    dhResult.textContent =
+                        "✓ Shared secrets match.\n" +
+                        "Alice and Bob successfully derived " +
+                        "the same shared secret.";
+
+                    dhMessage.textContent =
+                        "Diffie-Hellman key exchange completed successfully.";
+
+                    dhMessage.className =
+                        "crypto-message success";
+
+                } else {
+
+                    dhResult.textContent =
+                        "✗ Shared secrets do not match.";
+
+                    dhMessage.textContent =
+                        "Key exchange verification failed.";
+
+                    dhMessage.className =
+                        "crypto-message error";
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Diffie-Hellman Error:",
+                    error
+                );
+
+                dhResult.textContent =
+                    "Unable to perform the key exchange.";
+
+                dhMessage.textContent =
+                    "Diffie-Hellman operation failed.";
+
+                dhMessage.className =
+                    "crypto-message error";
+
+            } finally {
+
+                dhGenerateButton.disabled = false;
+
+            }
+
+        }
+    );
+
+}
 
 // ==========================================
 // SHA-256 HASHING

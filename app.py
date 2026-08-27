@@ -23,6 +23,7 @@ from modules.security.error_handler import (
     get_client_error_message
 )
 from modules.security.request_id import get_request_id
+
 from flask import Flask, render_template, request, jsonify
 from modules.cryptography.aes import encrypt_aes, decrypt_aes
 from modules.cryptography.des import encrypt_des, decrypt_des
@@ -30,6 +31,11 @@ from modules.cryptography.rsa import (
     generate_rsa_keys,
     encrypt_rsa,
     decrypt_rsa
+)
+from modules.cryptography.diffie_hellman import (
+    generate_dh_parameters,
+    generate_dh_key_pair,
+    generate_shared_secret
 )
 from modules.integrity.hash import sha256_hash
 from modules.integrity.hmac import hmac_sha256
@@ -263,6 +269,46 @@ def rsa_operation():
             "success": False,
             "error": "RSA operation failed. Check the key and encrypted data."
         }), 400
+
+# ==========================================
+# DIFFIE-HELLMAN KEY EXCHANGE API
+# ==========================================
+
+@app.route("/api/diffie-hellman/generate", methods=["POST"])
+def diffie_hellman_generate():
+    try:
+
+        parameters = generate_dh_parameters()
+
+        alice_private, alice_public = generate_dh_key_pair(
+            parameters
+        )
+
+        bob_private, bob_public = generate_dh_key_pair(
+            parameters
+        )
+
+        alice_shared_secret = generate_shared_secret(
+            alice_private,
+            bob_public
+        )
+
+        bob_shared_secret = generate_shared_secret(
+            bob_private,
+            alice_public
+        )
+
+        return jsonify({
+            "success": True,
+            "shared_secret_match":
+                alice_shared_secret == bob_shared_secret
+        })
+
+    except Exception:
+        return jsonify({
+            "success": False,
+            "error": "Unable to perform Diffie-Hellman key exchange."
+        }), 500
 
 @app.route("/api/hash", methods=["POST"])
 def hash_operation():
