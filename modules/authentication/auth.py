@@ -1,3 +1,4 @@
+from modules.security.password_policy import validate_password
 from modules.authentication.password_security import (
     hash_password,
     verify_password
@@ -18,6 +19,15 @@ def register_user(username, password):
             "message": "Username already exists."
         }
 
+    if not validate_password(password):
+        return {
+            "success": False,
+            "message": (
+                "Password must be 12-128 characters and contain "
+                "uppercase, lowercase, digit, and special character."
+            )
+        }
+
     salt, password_hash = hash_password(password)
 
     users[username] = {
@@ -29,28 +39,7 @@ def register_user(username, password):
         "success": True,
         "message": "User registered successfully."
     }
-    """
-    Register a new user.
-    """
-
-    if username in users:
-        return {
-            "success": False,
-            "message": "Username already exists."
-        }
-
-    password_hash = hash_password(password)
-
-    users[username] = {
-        "password_hash": password_hash
-    }
-
-    return {
-        "success": True,
-        "message": "User registered successfully."
-    }
-
-
+   
 def login_user(username, password):
     """
     Authenticate an existing user.
