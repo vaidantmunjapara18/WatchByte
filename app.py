@@ -601,52 +601,6 @@ def auth_login():
             "success": False,
            "error": get_client_error_message(error) 
         }), 400 
-    try:
-        data = request.get_json()
-
-        username = data.get("username", "").strip()
-        password = data.get("password", "")
-
-        if not username:
-            return jsonify({
-                "success": False,
-                "error": "Please enter a username."
-            }), 400
-
-        if not password:
-            return jsonify({
-                "success": False,
-                "error": "Please enter a password."
-            }), 400
-
-        result = login_user(username, password)
-
-        if not result["success"]:
-
-            add_log(
-                log_warning(
-                    f"Login failed for user '{username}'.",
-                    "Authentication"
-                )
-            )
-
-            return jsonify(result), 401
-
-
-        add_log(
-            log_info(
-                f"User '{username}' logged in successfully.",
-                "Authentication"
-            )
-        )
-
-        return jsonify(result), 200
-
-    except Exception as error:
-        return jsonify({
-            "success": False,
-            "error": get_client_error_message(error)
-        }), 400
 
 @app.route("/api/network/analyze", methods=["POST"])
 def analyze_network():
