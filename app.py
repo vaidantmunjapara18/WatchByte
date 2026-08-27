@@ -17,6 +17,7 @@ from modules.security.file_validation import (
 )
 from modules.security.authorization import authorize_session
 from modules.security.error_handler import get_safe_error_message
+from modules.security.request_id import get_request_id
 from flask import Flask, render_template, request, jsonify
 from modules.cryptography.aes import encrypt_aes, decrypt_aes
 from modules.cryptography.des import encrypt_des, decrypt_des
@@ -73,7 +74,9 @@ def handle_request_too_large(error):
 
 @app.after_request
 def add_security_headers(response):
-    return apply_security_headers(response)
+    response = apply_security_headers(response)
+    response.headers["X-Request-ID"] = get_request_id()
+    return response
 def get_client_ip():
     """
     Get the client's IP address from the current Flask request.
