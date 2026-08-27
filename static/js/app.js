@@ -1969,17 +1969,21 @@ function renderLogs(logs) {
 
     if (!logs || logs.length === 0) {
 
-        logsList.innerHTML = `
-            <div class="logs-empty">
+        const emptyEntry = document.createElement("div");
 
-                <strong>No security events</strong>
+        emptyEntry.className = "logs-empty";
 
-                <p>
-                    Security events will appear here.
-                </p>
+        const title = document.createElement("strong");
+        title.textContent = "No security events";
 
-            </div>
-        `;
+        const description = document.createElement("p");
+        description.textContent =
+            "Security events will appear here.";
+
+        emptyEntry.appendChild(title);
+        emptyEntry.appendChild(description);
+
+        logsList.appendChild(emptyEntry);
 
         return;
     }
@@ -1992,28 +1996,48 @@ function renderLogs(logs) {
         logEntry.className = "log-entry";
 
 
-        const level = String(log.level || "").toLowerCase();
+        const level = String(
+            log.level || ""
+        ).toLowerCase();
 
 
-        logEntry.innerHTML = `
+        const timestamp = document.createElement("span");
 
-            <span class="log-timestamp">
-                ${log.timestamp}
-            </span>
+        timestamp.className = "log-timestamp";
 
-            <span class="log-level ${level}">
-                ${log.level}
-            </span>
+        timestamp.textContent =
+            String(log.timestamp || "");
 
-            <span class="log-event">
-                ${log.event}
-            </span>
 
-            <span class="log-source">
-                ${log.source}
-            </span>
+        const levelElement = document.createElement("span");
 
-        `;
+        levelElement.className =
+            "log-level " + level;
+
+        levelElement.textContent =
+            String(log.level || "");
+
+
+        const event = document.createElement("span");
+
+        event.className = "log-event";
+
+        event.textContent =
+            String(log.event || "");
+
+
+        const source = document.createElement("span");
+
+        source.className = "log-source";
+
+        source.textContent =
+            String(log.source || "");
+
+
+        logEntry.appendChild(timestamp);
+        logEntry.appendChild(levelElement);
+        logEntry.appendChild(event);
+        logEntry.appendChild(source);
 
 
         logsList.appendChild(logEntry);
