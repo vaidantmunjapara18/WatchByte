@@ -2427,6 +2427,29 @@ if (captchaCancel) {
 }
 
 // ==========================================
+// CSRF TOKEN
+// ==========================================
+
+let currentCsrfToken = null;
+
+
+async function fetchCsrfToken() {
+    const response = await fetch("/api/security/csrf", {
+        method: "GET"
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success || !data.csrf_token) {
+        throw new Error("Unable to obtain CSRF token.");
+    }
+
+    currentCsrfToken = data.csrf_token;
+
+    return currentCsrfToken;
+}
+
+// ==========================================
 // SESSION MANAGEMENT
 // ==========================================
 
@@ -2529,13 +2552,17 @@ sessionLogout.addEventListener("click", async function() {
 
     try {
 
+        const csrfToken = await fetchCsrfToken();
+
         const response = await fetch("/api/auth/logout", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "X-CSRF-Token": csrfToken
             },
             body: JSON.stringify({
-                session_token: currentSessionToken
+                session_token: currentSessionToken,
+                csrf_token: csrfToken
             })
         });
 
