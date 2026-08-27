@@ -13,6 +13,11 @@ def apply_security_headers(response):
 
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
 
+    response.headers["Permissions-Policy"] = (
+    "camera=(), microphone=(), geolocation=(), "
+    "payment=(), usb=()"
+)
+
     response.headers["Content-Security-Policy"] = (
         "default-src 'self'; "
         "script-src 'self' 'unsafe-inline'; "
