@@ -2171,7 +2171,7 @@ const captchaCancel =
 
 
 let currentCaptcha = "";
-
+let currentCaptchaChallenge = "";
 
 /* ==========================================
    OPEN CAPTCHA
@@ -2241,6 +2241,7 @@ async function generateCaptchaForLogin() {
         }
 
 
+        currentCaptchaChallenge = data.challenge_id;
         currentCaptcha = data.captcha;
 
         captchaText.textContent =
@@ -2312,7 +2313,7 @@ async function verifyCaptchaForLogin() {
                 },
 
                 body: JSON.stringify({
-                    expected: currentCaptcha,
+                    challenge_id: currentCaptchaChallenge,
                     submitted: submittedCaptcha
                 })
             }

@@ -858,10 +858,11 @@ def clear_security_logs():
 @app.route("/api/captcha/generate", methods=["GET"])
 def generate_captcha_api():
 
-    captcha = generate_captcha()
+    challenge_id, captcha = generate_captcha()
 
     return jsonify({
         "success": True,
+        "challenge_id": challenge_id,
         "captcha": captcha
     })
 
@@ -873,10 +874,10 @@ def verify_captcha_api():
 
         data = request.get_json()
 
-        expected = data.get("expected", "")
+        challenge_id = data.get("challenge_id", "")
         submitted = data.get("submitted", "")
 
-        if not expected:
+        if not challenge_id:
             return jsonify({
                 "success": False,
                 "error": "CAPTCHA challenge is required."
@@ -889,7 +890,7 @@ def verify_captcha_api():
             }), 400
 
         verified = verify_captcha(
-            expected,
+            challenge_id,
             submitted
         )
 
