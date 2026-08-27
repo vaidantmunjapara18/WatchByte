@@ -11,6 +11,10 @@ from modules.security.request_limits import (
     is_request_size_allowed,
     get_max_request_size
 )
+from modules.security.file_validation import (
+    is_valid_filename,
+    is_file_size_allowed
+)
 from modules.security.error_handler import get_safe_error_message
 from flask import Flask, render_template, request, jsonify
 from modules.cryptography.aes import encrypt_aes, decrypt_aes
@@ -329,6 +333,25 @@ def file_hash_operation():
                 "error": "Please select a file."
             }), 400
 
+        # ==========================================
+        # FILE UPLOAD SECURITY VALIDATION
+        # ==========================================
+
+        if not is_valid_filename(file.filename):
+            return jsonify({
+                "success": False,
+                "error": "Invalid filename."
+            }), 400
+
+
+        file_size = request.content_length
+
+        if file_size is not None and not is_file_size_allowed(file_size):
+            return jsonify({
+                "success": False,
+                "error": "Uploaded file is too large. Maximum allowed size is 5 MB."
+            }), 413
+
         # Save the uploaded file temporarily
         import tempfile
         import os
@@ -351,10 +374,16 @@ def file_hash_operation():
         })
 
     except Exception as error:
+        if getattr(error, "code", None) == 413:
+            return jsonify({
+                "success": False,
+                "error": "Uploaded file is too large. Maximum allowed size is 5 MB."
+            }), 413
+
         return jsonify({
             "success": False,
-            "error": str(error)
-        }), 400
+            "error": get_safe_error_message(error)
+        }), 500
 
 @app.route("/api/auth/register", methods=["POST"])
 def auth_register():
