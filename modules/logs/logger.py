@@ -69,17 +69,24 @@ def log_block(
 
 security_logs = []
 
+MAX_SECURITY_LOGS = 1000
+
 
 def add_log(log):
     """
     Add a security log to the in-memory log list.
+
+    The oldest log is removed when the maximum
+    storage limit is reached.
     """
 
     security_logs.append(log)
 
+    if len(security_logs) > MAX_SECURITY_LOGS:
+        security_logs.pop(0)
+
     return log
-
-
+   
 def get_logs():
     """
     Return all stored security logs.
