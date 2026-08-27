@@ -3,6 +3,7 @@
 # ==========================================
 
 from datetime import datetime
+from modules.security.log_sanitizer import sanitize_log_message
 
 
 def create_log(
@@ -18,7 +19,7 @@ def create_log(
     return {
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "level": level.upper(),
-        "event": event,
+        "event": sanitize_log_message(event),
         "source": source,
         "ip_address": ip_address
     }
