@@ -66,26 +66,4 @@ def login_user(username, password):
         "success": False,
         "message": "Invalid username or password."
     }
-    """
-    Authenticate an existing user.
-    """
-
-    if username not in users:
-        return {
-            "success": False,
-            "message": "Invalid username or password."
-        }
-
-    password_hash = users[username]["password_hash"]
-
-    if verify_password(password, password_hash):
-
-        return {
-            "success": True,
-            "message": "Login successful."
-        }
-
-    return {
-        "success": False,
-        "message": "Invalid username or password."
-    }
+    

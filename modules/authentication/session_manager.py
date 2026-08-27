@@ -13,22 +13,44 @@ _sessions = {}
 # Session lifetime: 30 minutes
 SESSION_TIMEOUT = 30 * 60
 
+MAX_SESSIONS_PER_USER = 5
 
 def create_session(username):
     """
     Create a new secure session for a user.
+
+    If the user already has the maximum number of active
+    sessions, revoke the oldest session first.
     """
 
+    # Find all existing sessions for this user
+    user_sessions = [
+        (token, session)
+        for token, session in _sessions.items()
+        if session["username"] == username
+    ]
+
+    # Enforce maximum concurrent sessions
+    if len(user_sessions) >= MAX_SESSIONS_PER_USER:
+        oldest_token, _ = min(
+            user_sessions,
+            key=lambda item: item[1]["created_at"]
+        )
+
+        _sessions.pop(oldest_token, None)
+
+    # Generate a new secure session token
     session_token = secrets.token_urlsafe(32)
+
+    current_time = time()
 
     _sessions[session_token] = {
         "username": username,
-        "created_at": time(),
-        "last_activity": time()
+        "created_at": current_time,
+        "last_activity": current_time
     }
 
     return session_token
-
 
 def validate_session(session_token):
     """
