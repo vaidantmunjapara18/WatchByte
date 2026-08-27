@@ -15,6 +15,7 @@ from modules.security.file_validation import (
     is_valid_filename,
     validate_file_stream
 )
+from modules.security.authorization import authorize_session
 from modules.security.error_handler import get_safe_error_message
 from flask import Flask, render_template, request, jsonify
 from modules.cryptography.aes import encrypt_aes, decrypt_aes
@@ -769,6 +770,19 @@ def analyze_network():
 
 @app.route("/api/logs", methods=["GET"])
 def get_security_logs():
+
+    session_token = request.headers.get("Authorization", "")
+
+    if session_token.startswith("Bearer "):
+        session_token = session_token[7:]
+
+    session = authorize_session(session_token)
+
+    if session is None:
+        return jsonify({
+            "success": False,
+            "error": "Authentication required."
+        }), 401
 
     return jsonify({
         "success": True,
