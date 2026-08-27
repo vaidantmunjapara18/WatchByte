@@ -17,6 +17,10 @@ from modules.security.file_validation import (
 )
 from modules.security.authorization import authorize_session
 from modules.security.error_handler import get_safe_error_message
+from modules.security.error_handler import (
+    get_safe_error_message,
+    get_client_error_message
+)
 from modules.security.request_id import get_request_id
 from flask import Flask, render_template, request, jsonify
 from modules.cryptography.aes import encrypt_aes, decrypt_aes
@@ -283,7 +287,7 @@ def hash_operation():
     except Exception as error:
         return jsonify({
             "success": False,
-            "error": str(error)
+            "error": get_client_error_message(error)
         }), 400
 
 @app.route("/api/hmac", methods=["POST"])
@@ -317,7 +321,7 @@ def hmac_operation():
     except Exception as error:
         return jsonify({
             "success": False,
-            "error": str(error)
+            "error": get_client_error_message(error)
         }), 400
 
 @app.route("/api/file-hash", methods=["POST"])
@@ -435,7 +439,7 @@ def auth_register():
     except Exception as error:
         return jsonify({
             "success": False,
-            "error": str(error)
+            "error": get_client_error_message(error)
         }), 400
 
 
@@ -588,7 +592,7 @@ def auth_login():
 
         return jsonify({
             "success": False,
-            "error": str(error)
+           "error": get_client_error_message(error) 
         }), 400 
     try:
         data = request.get_json()
@@ -634,7 +638,7 @@ def auth_login():
     except Exception as error:
         return jsonify({
             "success": False,
-            "error": str(error)
+            "error": get_client_error_message(error)
         }), 400
 
 @app.route("/api/network/analyze", methods=["POST"])
@@ -764,7 +768,7 @@ def analyze_network():
 
         return jsonify({
             "success": False,
-            "error": str(error)
+            "error": get_client_error_message(error)
         }), 400
 
 # ==========================================
@@ -846,7 +850,7 @@ def create_security_log():
 
         return jsonify({
             "success": False,
-            "error": str(error)
+            "error": get_client_error_message(error)
         }), 400
 
 
@@ -948,7 +952,7 @@ def verify_captcha_api():
 
         return jsonify({
             "success": False,
-            "error": str(error)
+            "error": get_client_error_message(error)
         }), 400
 # ==========================================
 # CSRF PROTECTION API
@@ -1014,7 +1018,7 @@ def validate_auth_session():
 
         return jsonify({
             "success": False,
-            "error": str(error)
+            "error": get_client_error_message(error)
         }), 400
 
 @app.route("/api/auth/logout", methods=["POST"])
@@ -1084,7 +1088,7 @@ def auth_logout():
 
         return jsonify({
             "success": False,
-            "error": str(error)
+            "error": get_client_error_message(error)
         }), 400
 
 @app.route("/api/auth/sessions", methods=["GET"])
