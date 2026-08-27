@@ -5,7 +5,8 @@ from modules.security.csrf import (
 )
 from modules.security.input_validation import (
     validate_text,
-    validate_integer
+    validate_integer,
+    validate_username
 )
 from modules.security.request_limits import (
     is_request_size_allowed,
@@ -403,6 +404,12 @@ def auth_register():
             return jsonify({
                 "success": False,
                 "error": "Please enter a username."
+            }), 400
+
+        if not validate_username(username):
+            return jsonify({
+                "success": False,
+                "error": "Username must be 3-32 characters, start with a letter, and contain only letters, numbers, underscores, or hyphens."
             }), 400
 
         if not password:

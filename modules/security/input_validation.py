@@ -1,3 +1,5 @@
+import re
+
 # ==========================================
 # WATCHBYTE INPUT VALIDATION
 # ==========================================
@@ -47,3 +49,21 @@ def validate_integer(value, minimum=None, maximum=None):
         return False
 
     return True
+
+def validate_username(username):
+    """
+    Validate a WatchByte username.
+
+    Requirements:
+    - 3 to 32 characters
+    - Starts with a letter
+    - Contains only letters, numbers, underscores, and hyphens
+    """
+
+    if not isinstance(username, str):
+        return False
+
+    if not 3 <= len(username) <= 32:
+        return False
+
+    return bool(re.fullmatch(r"[A-Za-z][A-Za-z0-9_-]*", username))  
