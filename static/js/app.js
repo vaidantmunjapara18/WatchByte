@@ -2027,7 +2027,11 @@ async function loadSecurityLogs() {
 
     try {
 
-        const response = await fetch("/api/logs");
+        const response = await fetch("/api/logs", {
+            headers: {
+                "Authorization": "Bearer " + currentSessionToken
+            }
+        });
 
         const data = await response.json();
 
@@ -2071,7 +2075,10 @@ async function clearSecurityLogs() {
         const response = await fetch(
             "/api/logs/clear",
             {
-                method: "POST"
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + currentSessionToken
+                }
             }
         );
 

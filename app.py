@@ -807,58 +807,71 @@ def get_security_logs():
 @app.route("/api/logs", methods=["POST"])
 def create_security_log():
 
-    try:
+        session_token = request.headers.get("Authorization", "")
 
-        data = request.get_json()
+        if session_token.startswith("Bearer "):
+            session_token = session_token[7:]
 
-        level = data.get("level", "").strip().upper()
-        event = data.get("event", "").strip()
-        source = data.get("source", "WatchByte").strip()
+        session = authorize_session(session_token)
 
-        if not level:
+        if session is None:
             return jsonify({
                 "success": False,
-                "error": "Log level is required."
-            }), 400
+                "error": "Authentication required."
+            }), 401
 
-        if not event:
+        try:
+
+            data = request.get_json()
+
+            level = data.get("level", "").strip().upper()
+            event = data.get("event", "").strip()
+            source = data.get("source", "WatchByte").strip()
+
+            if not level:
+                return jsonify({
+                    "success": False,
+                    "error": "Log level is required."
+                }), 400
+
+            if not event:
+                return jsonify({
+                    "success": False,
+                    "error": "Log event is required."
+                }), 400
+
+            if level == "INFO":
+
+                log = log_info(event, source)
+
+            elif level == "WARNING":
+
+                log = log_warning(event, source)
+
+            elif level == "BLOCK":
+
+                log = log_block(event, source)
+
+            else:
+
+                return jsonify({
+                    "success": False,
+                    "error": "Invalid log level."
+                }), 400
+
+            add_log(log)
+
+            return jsonify({
+                "success": True,
+                "log": log
+            }), 201
+
+        except Exception as error:
+
             return jsonify({
                 "success": False,
-                "error": "Log event is required."
+                "error": get_client_error_message(error)
             }), 400
-
-        if level == "INFO":
-
-            log = log_info(event, source)
-
-        elif level == "WARNING":
-
-            log = log_warning(event, source)
-
-        elif level == "BLOCK":
-
-            log = log_block(event, source)
-
-        else:
-
-            return jsonify({
-                "success": False,
-                "error": "Invalid log level."
-            }), 400
-
-        add_log(log)
-
-        return jsonify({
-            "success": True,
-            "log": log
-        }), 201
-
-    except Exception as error:
-
-        return jsonify({
-            "success": False,
-            "error": get_client_error_message(error)
-        }), 400
 
 
 @app.route("/api/logs/clear", methods=["POST"])
