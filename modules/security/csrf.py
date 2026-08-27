@@ -7,6 +7,8 @@ import secrets
 
 csrf_tokens = set()
 
+MAX_CSRF_TOKENS = 1000
+
 
 def generate_csrf_token():
     """
@@ -14,6 +16,9 @@ def generate_csrf_token():
     """
 
     token = secrets.token_urlsafe(32)
+
+    if len(csrf_tokens) >= MAX_CSRF_TOKENS:
+        csrf_tokens.pop()
 
     csrf_tokens.add(token)
 
