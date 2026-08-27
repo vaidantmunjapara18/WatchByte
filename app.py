@@ -850,6 +850,19 @@ def create_security_log():
 @app.route("/api/logs/clear", methods=["POST"])
 def clear_security_logs():
 
+    session_token = request.headers.get("Authorization", "")
+
+    if session_token.startswith("Bearer "):
+        session_token = session_token[7:]
+
+    session = authorize_session(session_token)
+
+    if session is None:
+        return jsonify({
+            "success": False,
+            "error": "Authentication required."
+        }), 401
+
     clear_logs()
 
     return jsonify({
@@ -1073,6 +1086,19 @@ def auth_logout():
 
 @app.route("/api/auth/sessions", methods=["GET"])
 def active_sessions():
+
+    session_token = request.headers.get("Authorization", "")
+
+    if session_token.startswith("Bearer "):
+        session_token = session_token[7:]
+
+    session = authorize_session(session_token)
+
+    if session is None:
+        return jsonify({
+            "success": False,
+            "error": "Authentication required."
+        }), 401
 
     return jsonify({
         "success": True,
