@@ -13,7 +13,7 @@ from modules.security.request_limits import (
 )
 from modules.security.file_validation import (
     is_valid_filename,
-    is_file_size_allowed
+    validate_file_stream
 )
 from modules.security.error_handler import get_safe_error_message
 from flask import Flask, render_template, request, jsonify
@@ -344,9 +344,7 @@ def file_hash_operation():
             }), 400
 
 
-        file_size = request.content_length
-
-        if file_size is not None and not is_file_size_allowed(file_size):
+        if not validate_file_stream(file.stream):
             return jsonify({
                 "success": False,
                 "error": "Uploaded file is too large. Maximum allowed size is 5 MB."

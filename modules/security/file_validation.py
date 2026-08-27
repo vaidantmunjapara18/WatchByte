@@ -49,3 +49,21 @@ def get_max_file_size():
     """
 
     return MAX_FILE_SIZE
+
+def validate_file_stream(file_stream):
+    """
+    Check the actual size of an uploaded file stream
+    without loading the entire file into memory.
+    """
+
+    if file_stream is None:
+        return False
+
+    current_position = file_stream.tell()
+
+    file_stream.seek(0, 2)
+    file_size = file_stream.tell()
+
+    file_stream.seek(current_position)
+
+    return is_file_size_allowed(file_size)
